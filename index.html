@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Utsav Saini — Product Designer</title>
+<meta name="description" content="Utsav Saini is a Product Designer focused on dashboard interfaces for finance, supply-chain, and operations teams. Open to new opportunities.">
+<script>
+  (function () {
+    var stored = localStorage.getItem('theme');
+    var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --surface: #f0efe9;
+    --border: #e4e2da;
+    --text: #16161a;
+    --text-dim: #6c6c74;
+    --accent: #2b52ff;
+    --nav-bg: rgba(250, 250, 247, 0.85);
+    --media-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.05), inset 0 3px 14px rgba(17, 17, 17, 0.05);
+    --width: 620px;
+  }
+
+  [data-theme="dark"] {
+    --bg: #121214;
+    --surface: #1c1c20;
+    --border: #2b2b30;
+    --text: #f3f2ee;
+    --text-dim: #9b9aa1;
+    --accent: #6f8bff;
+    --nav-bg: rgba(18, 18, 20, 0.85);
+    --media-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 3px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: var(--width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Nav */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--nav-bg);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease, background-color 0.4s ease;
+  }
+
+  .nav.scrolled { border-bottom-color: var(--border); }
+
+  .nav-inner {
+    max-width: var(--width);
+    margin: 0 auto;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .nav-name {
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 22px;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.25s ease, border-color 0.4s ease, transform 0.25s ease;
+  }
+
+  .theme-toggle:hover {
+    background: var(--surface);
+    transform: translateY(-1px);
+  }
+
+  .theme-toggle svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .theme-toggle .icon-sun { display: none; }
+
+  [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+  [data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+
+  /* Reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Hero */
+  .hero {
+    padding: 84px 0 72px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin: 0 0 22px;
+  }
+
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #2bb673;
+    position: relative;
+  }
+
+  .status-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: #2bb673;
+    animation: pulse 2s ease-out infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 0.6; }
+    100% { transform: scale(2.8); opacity: 0; }
+  }
+
+  h1 {
+    font-size: clamp(32px, 6vw, 44px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    margin: 0 0 22px;
+  }
+
+  .hero-and { color: var(--text-dim); font-weight: 500; }
+
+  .hero-bio {
+    font-size: 17px;
+    color: var(--text-dim);
+    max-width: 52ch;
+    margin: 0 0 30px;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text);
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .hero-cta:hover {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+    transform: translateY(-2px);
+  }
+
+  /* Section label */
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 28px;
+  }
+
+  section { padding: 56px 0; }
+
+  section + section { border-top: 1px solid var(--border); }
+
+  /* Work */
+  .project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  .project-media {
+    position: relative;
+    min-height: 200px;
+    border-radius: 16px;
+    background: var(--surface);
+    box-shadow: var(--media-shadow);
+    padding: clamp(20px, 5vw, 36px);
+    margin-bottom: 22px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .project:hover .project-media { transform: translateY(-4px); }
+
+  .project-media-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .project-media img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+  }
+
+  .project-tag {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 8px;
+  }
+
+  .project-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 10px;
+  }
+
+  .project-line {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+
+  .project-desc {
+    font-size: 15px;
+    color: var(--text-dim);
+    margin: 0;
+    max-width: 56ch;
+  }
+
+  .project {
+    cursor: pointer;
+    outline: none;
+    border-radius: 16px;
+  }
+
+  .project:focus-visible {
+    box-shadow: 0 0 0 3px var(--accent);
+  }
+
+  .project-view {
+    display: inline-flex;
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    transition: transform 0.25s ease;
+  }
+
+  .project:hover .project-view { transform: translateX(4px); }
+
+  /* Project modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 48px 20px;
+    overflow-y: auto;
+    background: rgba(10, 10, 12, 0.55);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: 720px;
+    background: var(--bg);
+    border-radius: 20px;
+    padding: 40px 36px 48px;
+    position: relative;
+    transform: translateY(18px) scale(0.98);
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, background-color 0.4s ease;
+  }
+
+  .modal-overlay.open .modal {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--text);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .modal-close:hover {
+    background: var(--surface);
+    transform: rotate(90deg);
+  }
+
+  .modal-close svg { width: 14px; height: 14px; }
+
+  .modal-head { max-width: 56ch; margin-bottom: 28px; }
+
+  .modal-title {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 10px;
+  }
+
+  .modal-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .modal-gallery img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  @media (max-width: 560px) {
+    .modal-overlay { padding: 0; }
+    .modal { max-width: none; min-height: 100%; border-radius: 0; padding: 32px 20px 40px; }
+  }
+
+  /* About / Experience */
+  .role-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .role-head h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .role-dates {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .role-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 0 0 12px;
+  }
+
+  .role-desc {
+    font-size: 15px;
+    color: var(--text-dim);
+    margin: 0;
+    max-width: 56ch;
+  }
+
+  /* Contact */
+  .contact h2 {
+    font-size: clamp(26px, 5vw, 34px);
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+  }
+
+  .contact-line {
+    font-size: 15px;
+    color: var(--text-dim);
+    margin: 0 0 28px;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .contact-links a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .contact-links a:hover {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+    transform: translateY(-2px);
+  }
+
+  .contact-links a.primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .contact-links a.primary:hover {
+    background: #1f3fd6;
+    border-color: #1f3fd6;
+  }
+
+  footer {
+    padding: 28px 0 56px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 480px) {
+    .hero { padding: 56px 0 48px; }
+    section { padding: 44px 0; }
+    .nav-inner { padding: 16px 20px; }
+    .wrap, .nav-inner { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#top" class="nav-name">Utsav Saini</a>
+      <div class="nav-right">
+        <nav class="nav-links">
+          <a href="#work">Work</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12.5A8.5 8.5 0 1 1 11.5 4a6.5 6.5 0 0 0 8.5 8.5Z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M4.5 12H2M22 12h-2.5M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" id="top">
+
+    <section class="hero">
+      <p class="eyebrow"><span class="status-dot"></span> Product Designer — Open to new opportunities</p>
+      <h1>Obsessed with craft <span class="hero-and">and</span> function.</h1>
+      <p class="hero-bio">
+        I design dashboard interfaces for finance, supply-chain, and operations teams —
+        turning complex, multi-step processes into visualizations people can actually
+        read at a glance.
+      </p>
+      <a href="#work" class="hero-cta">See the work ↓</a>
+    </section>
+
+    <section class="work reveal" id="work">
+      <p class="section-label">Selected Work</p>
+
+      <div class="project-list">
+
+        <article class="project reveal" data-project="process-pulse" tabindex="0" role="button" aria-haspopup="dialog">
+          <div class="project-media">
+            <div class="project-media-placeholder">Add screenshot — save as<br><code>images/process-pulse.png</code></div>
+            <img src="images/PTP%20Process%20Pulse.png" alt="Process Pulse — a Sankey-style dashboard tracing a procure-to-pay process" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <p class="project-tag">Finance · Data Visualization</p>
+          <h3 class="project-title">Process Pulse</h3>
+          <p class="project-line">Turning a five-stage procure-to-pay pipeline into a single, readable flow.</p>
+          <p class="project-desc">
+            A Sankey-based dashboard that traces every invoice through sourcing, indexing,
+            matching, exceptions, and posting — surfacing straight-through rates and
+            exception hotspots at a glance, in a process that used to take a spreadsheet
+            and a lot of explaining.
+          </p>
+          <span class="project-view">View project →</span>
+        </article>
+
+        <article class="project reveal" data-project="reckoner" tabindex="0" role="button" aria-haspopup="dialog">
+          <div class="project-media">
+            <div class="project-media-placeholder">Add screenshot — save as<br><code>images/reckoner.png</code></div>
+            <img src="images/Reckoner%20Data%20Summary%2001.png" alt="Reckoner — a forecasting workbench comparing statistical models" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <p class="project-tag">Supply Chain · Forecasting</p>
+          <h3 class="project-title">Reckoner</h3>
+          <p class="project-line">A forecasting workbench that makes seven statistical models feel like one simple decision.</p>
+          <p class="project-desc">
+            Planners upload demand data, compare models — TBATS, ARIMA, Holt-Winters, and
+            more — side by side on accuracy, and tune seasonality and trend without
+            touching a formula. The hard part was making statistical forecasting legible
+            to people who aren't statisticians.
+          </p>
+          <span class="project-view">View project →</span>
+        </article>
+
+        <article class="project reveal" data-project="nest" tabindex="0" role="button" aria-haspopup="dialog">
+          <div class="project-media">
+            <div class="project-media-placeholder">Add screenshot — save as<br><code>images/nest.png</code></div>
+            <img src="images/Nest%20PMO%20Deal%20Demographics%20Key%20Attributes.png" alt="Nest — a guided workspace for configuring client transitions" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <p class="project-tag">Operations · Transition Management</p>
+          <h3 class="project-title">Nest</h3>
+          <p class="project-line">The workspace that guides teams through standing up a new client transition.</p>
+          <p class="project-desc">
+            From deal demographics to workstream timelines, Nest structures the dozens of
+            configuration steps a transition team has to get right — replacing scattered
+            trackers with one guided, step-by-step setup.
+          </p>
+          <span class="project-view">View project →</span>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="about reveal" id="about">
+      <p class="section-label">Experience</p>
+      <div class="role">
+        <div class="role-head">
+          <h3>Accenture</h3>
+          <span class="role-dates">2018 — 2023</span>
+        </div>
+        <p class="role-title">Product Designer</p>
+        <p class="role-desc">
+          Five years designing dashboard interfaces for enterprise functions — Finance
+          &amp; Accounting, Supply Chain, and beyond. My focus was imagining clear
+          visualizations for complex, multi-step processes and simplifying them for fast
+          insight.
+        </p>
+      </div>
+    </section>
+
+    <section class="contact reveal" id="contact">
+      <p class="section-label">Get in touch</p>
+      <h2>Let's talk.</h2>
+      <p class="contact-line">Open to new opportunities — reach out anytime.</p>
+      <div class="contact-links">
+        <a class="primary" href="mailto:utsavsaini747@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/utsavsaini/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://x.com/utsav_saini" target="_blank" rel="noopener">X</a>
+      </div>
+    </section>
+
+    <footer>© 2026 Utsav Saini</footer>
+
+  </main>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      </button>
+      <div class="modal-head">
+        <p class="project-tag" id="modalTag"></p>
+        <h3 class="modal-title" id="modalTitle"></h3>
+        <p class="project-line" id="modalLine"></p>
+        <p class="project-desc" id="modalDesc"></p>
+      </div>
+      <div class="modal-gallery" id="modalGallery"></div>
+    </div>
+  </div>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 8);
+  }, { passive: true });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+
+  // Project modal
+  const PROJECTS = {
+    'process-pulse': {
+      tag: 'Finance · Data Visualization',
+      title: 'Process Pulse',
+      line: 'Turning a five-stage procure-to-pay pipeline into a single, readable flow.',
+      desc: 'A Sankey-based dashboard that traces every invoice through sourcing, indexing, matching, exceptions, and posting — surfacing straight-through rates and exception hotspots at a glance, in a process that used to take a spreadsheet and a lot of explaining.',
+      images: ['PTP Process Pulse.png']
+    },
+    'reckoner': {
+      tag: 'Supply Chain · Forecasting',
+      title: 'Reckoner',
+      line: 'A forecasting workbench that makes seven statistical models feel like one simple decision.',
+      desc: "Planners upload demand data, compare models — TBATS, ARIMA, Holt-Winters, and more — side by side on accuracy, and tune seasonality and trend without touching a formula. The hard part was making statistical forecasting legible to people who aren't statisticians.",
+      images: [
+        'Reckoner Data Summary 01.png',
+        'Reckoner Model Tbats.png',
+        'Reckoner Model Ex SES.png',
+        'Reckoner Model Ex LES.png',
+        'Reckoner Model Ex HW.png'
+      ]
+    },
+    'nest': {
+      tag: 'Operations · Transition Management',
+      title: 'Nest',
+      line: 'The workspace that guides teams through standing up a new client transition.',
+      desc: 'From deal demographics to workstream timelines, Nest structures the dozens of configuration steps a transition team has to get right — replacing scattered trackers with one guided, step-by-step setup.',
+      images: [
+        'Nest PMO Deal Demographics Key Attributes.png',
+        'Nest PMO Deal Demographics Additional Attributes.png',
+        'Nest PMO Transition Timeline Tab 1 copy paste feature single row.png',
+        'Nest PMO Transition Timeline Tab 1 copy paste feature blue outline buttons.png',
+        'Nest PMO Transition Timeline Tab 1 copy paste feature blue outline buttons hover keyboard shortcut.png'
+      ]
+    }
+  };
+
+  const overlay = document.getElementById('modalOverlay');
+  const modal = document.getElementById('modal');
+  const modalTag = document.getElementById('modalTag');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalLine = document.getElementById('modalLine');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalGallery = document.getElementById('modalGallery');
+  const modalClose = document.getElementById('modalClose');
+  let lastFocused = null;
+
+  function openProject(id) {
+    const data = PROJECTS[id];
+    if (!data) return;
+    modalTag.textContent = data.tag;
+    modalTitle.textContent = data.title;
+    modalLine.textContent = data.line;
+    modalDesc.textContent = data.desc;
+    modalGallery.innerHTML = data.images
+      .map((file) => `<img src="images/${encodeURIComponent(file)}" alt="${data.title} screenshot" loading="lazy">`)
+      .join('');
+
+    lastFocused = document.activeElement;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    modalClose.focus();
+  }
+
+  function closeProject() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('.project[data-project]').forEach((card) => {
+    card.addEventListener('click', () => openProject(card.dataset.project));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openProject(card.dataset.project);
+      }
+    });
+  });
+
+  modalClose.addEventListener('click', closeProject);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeProject();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeProject();
+  });
+</script>
+
+</body>
+</html>

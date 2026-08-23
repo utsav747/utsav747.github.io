@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slot Machine</title>
+<style>
+  :root {
+    --bg: #100c1a;
+    --panel: #1b1530;
+    --panel-soft: #241c3d;
+    --window-bg: #150f26;
+    --accent: #ffb703;
+    --accent-2: #ff5d73;
+    --win: #4cc9f0;
+    --text: #f5f3ff;
+    --text-dim: #a99fc9;
+    --cell: 96px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .stage {
+    padding: 32px 16px;
+  }
+
+  .slot-machine {
+    width: min(92vw, 480px);
+    background: var(--panel);
+    border-radius: 28px;
+    padding: 28px 28px 24px;
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.6);
+    user-select: none;
+  }
+
+  .sm-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+  }
+
+  .sm-title {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+  }
+
+  .sm-credits {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    background: var(--panel-soft);
+    padding: 8px 14px;
+    border-radius: 999px;
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+  }
+
+  #creditsValue {
+    color: var(--text);
+    font-size: 14px;
+    transition: transform 0.2s ease;
+  }
+
+  #creditsValue.bump {
+    transform: scale(1.25);
+    color: var(--win);
+  }
+
+  .sm-body {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .reels {
+    position: relative;
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    background: var(--window-bg);
+    border-radius: 18px;
+    padding: 14px;
+  }
+
+  .reel-window {
+    flex: 1;
+    height: var(--cell);
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--panel-soft);
+    position: relative;
+  }
+
+  .reel-strip {
+    will-change: transform;
+    filter: blur(0px);
+    transition: filter 0.25s ease;
+  }
+
+  .reel-strip.spinning {
+    filter: blur(6px);
+  }
+
+  .symbol {
+    height: var(--cell);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .symbol svg {
+    width: 56px;
+    height: 56px;
+  }
+
+  .reel-window.win {
+    box-shadow: inset 0 0 0 2px var(--win);
+  }
+
+  /* Lever */
+  .lever {
+    width: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    outline: none;
+    touch-action: none;
+  }
+
+  .lever-track {
+    width: 10px;
+    height: 116px;
+    background: var(--panel-soft);
+    border-radius: 999px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+  }
+
+  .lever-handle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;
+  }
+
+  .lever-handle.dragging {
+    transition: background 0.2s ease;
+  }
+
+  .lever:focus-visible .lever-handle {
+    box-shadow: 0 0 0 3px var(--win);
+  }
+
+  .lever.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .lever-base {
+    width: 40px;
+    height: 10px;
+    background: var(--panel-soft);
+    border-radius: 6px;
+    margin-top: 6px;
+  }
+
+  .sm-footer {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sm-message {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    text-align: center;
+    min-height: 16px;
+    transition: color 0.2s ease;
+  }
+
+  .sm-message.pop {
+    animation: pop 0.35s ease;
+  }
+
+  .sm-message.win-text {
+    color: var(--win);
+  }
+
+  .sm-message.lose-text {
+    color: var(--accent-2);
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0.85); opacity: 0; }
+    60% { transform: scale(1.08); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+
+  .sm-refill {
+    background: var(--accent);
+    color: #1b1530;
+    border: none;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+
+  .sm-refill:hover {
+    transform: translateY(-1px);
+    background: #ffc93c;
+  }
+
+  .sm-refill:active {
+    transform: translateY(0);
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  .shake {
+    animation: shake 0.3s ease;
+  }
+
+  @media (max-width: 420px) {
+    :root { --cell: 76px; }
+    .symbol svg { width: 44px; height: 44px; }
+    .lever { width: 44px; }
+    .lever-track { height: 96px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="stage">
+    <div class="slot-machine" id="slotMachine">
+      <div class="sm-header">
+        <span class="sm-title">LUCKY SPIN</span>
+        <div class="sm-credits">CREDITS <span id="creditsValue">100</span></div>
+      </div>
+
+      <div class="sm-body">
+        <div class="reels" id="reels">
+          <div class="reel-window" data-reel="0"><div class="reel-strip" id="strip0"></div></div>
+          <div class="reel-window" data-reel="1"><div class="reel-strip" id="strip1"></div></div>
+          <div class="reel-window" data-reel="2"><div class="reel-strip" id="strip2"></div></div>
+        </div>
+
+        <div class="lever" id="lever" tabindex="0" role="button" aria-label="Pull lever to spin">
+          <div class="lever-track">
+            <div class="lever-handle" id="leverHandle"></div>
+          </div>
+          <div class="lever-base"></div>
+        </div>
+      </div>
+
+      <div class="sm-footer">
+        <div class="sm-message" id="message">PULL THE LEVER TO PLAY</div>
+        <button class="sm-refill" id="refillBtn" hidden>REFILL CREDITS</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function () {
+  const CELL = getCellSize();
+  const SPIN_COST = 10;
+  const TWO_MATCH_PAYOUT = 20;
+  const JACKPOT_PAYOUT = 100;
+  const REPEATS = 6;
+
+  function getCellSize() {
+    return window.matchMedia('(max-width: 420px)').matches ? 76 : 96;
+  }
+
+  const SYMBOLS = [
+    {
+      id: 'cherry',
+      svg: `<svg viewBox="0 0 64 64">
+        <path d="M32 8 C30 18, 27 21, 25 25" stroke="#5cb85c" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M32 8 C34 17, 37 19, 40 23" stroke="#5cb85c" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <ellipse cx="21" cy="13" rx="7" ry="4.5" fill="#5cb85c" transform="rotate(-25 21 13)"/>
+        <circle cx="24" cy="43" r="12" fill="#ff5d73"/>
+        <circle cx="42" cy="43" r="12" fill="#ff5d73"/>
+      </svg>`
+    },
+    {
+      id: 'lemon',
+      svg: `<svg viewBox="0 0 64 64">
+        <ellipse cx="32" cy="32" rx="21" ry="14" fill="#ffd60a" transform="rotate(35 32 32)"/>
+      </svg>`
+    },
+    {
+      id: 'grape',
+      svg: `<svg viewBox="0 0 64 64">
+        <path d="M32 6 L32 16" stroke="#5cb85c" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="32" cy="20" r="7" fill="#9b5de5"/>
+        <circle cx="22" cy="30" r="7" fill="#9b5de5"/>
+        <circle cx="42" cy="30" r="7" fill="#9b5de5"/>
+        <circle cx="27" cy="42" r="7" fill="#9b5de5"/>
+        <circle cx="37" cy="42" r="7" fill="#9b5de5"/>
+        <circle cx="32" cy="52" r="7" fill="#9b5de5"/>
+      </svg>`
+    },
+    {
+      id: 'bell',
+      svg: `<svg viewBox="0 0 64 64">
+        <path d="M32 10c-2 0-3.5 1.6-3.5 3.6v1.2C22 16.6 18 22.4 18 29.4V40l-4 6h36l-4-6V29.4c0-7-4-12.8-10.5-14.6v-1.2C35.5 11.6 34 10 32 10z" fill="#ffb703"/>
+        <circle cx="32" cy="50" r="4.5" fill="#7a4e00"/>
+      </svg>`
+    },
+    {
+      id: 'star',
+      svg: `<svg viewBox="0 0 64 64">
+        <polygon points="32,6 39,24 58,24 43,36 48,55 32,44 16,55 21,36 6,24 25,24"
+          fill="#4cc9f0"/>
+      </svg>`
+    },
+    {
+      id: 'diamond',
+      svg: `<svg viewBox="0 0 64 64">
+        <polygon points="32,8 52,32 32,56 12,32" fill="#f72585"/>
+      </svg>`
+    },
+    {
+      id: 'seven',
+      svg: `<svg viewBox="0 0 64 64">
+        <text x="32" y="46" font-family="Arial, sans-serif" font-weight="800" font-size="42"
+          text-anchor="middle" fill="#f5f3ff">7</text>
+      </svg>`
+    }
+  ];
+
+  const strips = [
+    document.getElementById('strip0'),
+    document.getElementById('strip1'),
+    document.getElementById('strip2')
+  ];
+  const windows = document.querySelectorAll('.reel-window');
+  const messageEl = document.getElementById('message');
+  const creditsEl = document.getElementById('creditsValue');
+  const refillBtn = document.getElementById('refillBtn');
+  const lever = document.getElementById('lever');
+  const leverHandle = document.getElementById('leverHandle');
+  const leverTrack = lever.querySelector('.lever-track');
+
+  let credits = 100;
+  let spinning = false;
+  let positions = [0, 0, 0];
+
+  strips.forEach(buildStrip);
+  setAllPositions(false);
+
+  function buildStrip(el) {
+    let html = '';
+    for (let r = 0; r < REPEATS; r++) {
+      for (const s of SYMBOLS) {
+        html += `<div class="symbol" data-id="${s.id}">${s.svg}</div>`;
+      }
+    }
+    el.innerHTML = html;
+  }
+
+  function setPosition(el, pos, animate, duration, easing) {
+    el.style.transition = animate
+      ? `transform ${duration}ms ${easing}`
+      : 'none';
+    el.style.transform = `translateY(-${pos * CELL}px)`;
+  }
+
+  function setAllPositions(animate) {
+    strips.forEach((el, i) => setPosition(el, positions[i], animate));
+  }
+
+  function spinReel(el, index, duration) {
+    return new Promise((resolve) => {
+      const stripLength = SYMBOLS.length * REPEATS;
+      const landingSymbolOffset = Math.floor(Math.random() * SYMBOLS.length);
+      const targetPos = positions[index] + SYMBOLS.length * 3 + landingSymbolOffset;
+
+      el.classList.add('spinning');
+      setPosition(el, targetPos, true, duration, 'cubic-bezier(0.12, 0.72, 0.22, 1)');
+
+      const blurOffTimer = setTimeout(() => {
+        el.classList.remove('spinning');
+      }, Math.max(duration - 260, 0));
+
+      const done = () => {
+        clearTimeout(blurOffTimer);
+        el.classList.remove('spinning');
+        const actualPos = targetPos % stripLength;
+        setPosition(el, actualPos, false);
+        positions[index] = actualPos;
+        el.removeEventListener('transitionend', onEnd);
+        resolve(SYMBOLS[actualPos % SYMBOLS.length].id);
+      };
+
+      let settled = false;
+      function onEnd(e) {
+        if (e.propertyName !== 'transform' || settled) return;
+        settled = true;
+        done();
+      }
+      el.addEventListener('transitionend', onEnd);
+
+      setTimeout(() => {
+        if (!settled) {
+          settled = true;
+          done();
+        }
+      }, duration + 150);
+    });
+  }
+
+  function setMessage(text, variant) {
+    messageEl.classList.remove('pop', 'win-text', 'lose-text');
+    void messageEl.offsetWidth;
+    messageEl.textContent = text;
+    if (variant) messageEl.classList.add(variant);
+    messageEl.classList.add('pop');
+  }
+
+  function bumpCredits() {
+    creditsEl.classList.remove('bump');
+    void creditsEl.offsetWidth;
+    creditsEl.classList.add('bump');
+  }
+
+  function updateCredits(delta) {
+    credits += delta;
+    creditsEl.textContent = credits;
+    bumpCredits();
+    if (credits < SPIN_COST) {
+      refillBtn.hidden = false;
+    }
+  }
+
+  function clearWinState() {
+    windows.forEach((w) => w.classList.remove('win'));
+  }
+
+  function celebrate() {
+    windows.forEach((w) => w.classList.add('win'));
+  }
+
+  async function onSpin() {
+    if (spinning) return;
+    if (credits < SPIN_COST) {
+      setMessage('OUT OF CREDITS', 'lose-text');
+      lever.classList.add('shake');
+      setTimeout(() => lever.classList.remove('shake'), 300);
+      return;
+    }
+
+    spinning = true;
+    clearWinState();
+    lever.classList.add('disabled');
+    updateCredits(-SPIN_COST);
+    setMessage('SPINNING…');
+
+    const durations = [1300, 1650, 2000];
+    const results = await Promise.all(
+      strips.map((el, i) => spinReel(el, i, durations[i]))
+    );
+
+    const [a, b, c] = results;
+    if (a === b && b === c) {
+      updateCredits(JACKPOT_PAYOUT);
+      celebrate();
+      setMessage(`JACKPOT! +${JACKPOT_PAYOUT}`, 'win-text');
+    } else if (a === b || b === c || a === c) {
+      updateCredits(TWO_MATCH_PAYOUT);
+      celebrate();
+      setMessage(`NICE! +${TWO_MATCH_PAYOUT}`, 'win-text');
+    } else {
+      setMessage('TRY AGAIN', 'lose-text');
+    }
+
+    spinning = false;
+    lever.classList.remove('disabled');
+    if (credits < SPIN_COST) {
+      setTimeout(() => setMessage('OUT OF CREDITS', 'lose-text'), 1200);
+    }
+  }
+
+  // Lever: drag interaction
+  const MAX_TRAVEL = 82;
+  let dragging = false;
+  let dragStartY = 0;
+
+  function setHandleOffset(px, animate) {
+    leverHandle.style.transition = animate
+      ? 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease'
+      : 'none';
+    leverHandle.style.transform = `translate(-50%, ${px}px)`;
+  }
+
+  leverHandle.addEventListener('pointerdown', (e) => {
+    if (spinning) return;
+    dragging = true;
+    dragStartY = e.clientY;
+    leverHandle.setPointerCapture(e.pointerId);
+    leverHandle.classList.add('dragging');
+  });
+
+  leverHandle.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const delta = Math.max(0, Math.min(MAX_TRAVEL, e.clientY - dragStartY));
+    setHandleOffset(delta, false);
+  });
+
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    leverHandle.classList.remove('dragging');
+    const delta = Math.max(0, Math.min(MAX_TRAVEL, (e.clientY || dragStartY) - dragStartY));
+    setHandleOffset(0, true);
+    if (delta >= MAX_TRAVEL * 0.6) {
+      onSpin();
+    }
+  }
+
+  leverHandle.addEventListener('pointerup', endDrag);
+  leverHandle.addEventListener('pointercancel', endDrag);
+
+  // Lever: click / keyboard fallback (simulated pull)
+  function simulatedPull() {
+    if (spinning) return;
+    setHandleOffset(MAX_TRAVEL, true);
+    onSpin();
+    setTimeout(() => setHandleOffset(0, true), 220);
+  }
+
+  lever.addEventListener('click', (e) => {
+    if (e.target === leverHandle) return; // handled by drag
+    simulatedPull();
+  });
+
+  lever.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      simulatedPull();
+    }
+  });
+
+  refillBtn.addEventListener('click', () => {
+    credits = 100;
+    creditsEl.textContent = credits;
+    bumpCredits();
+    refillBtn.hidden = true;
+    setMessage('CREDITS REFILLED', 'win-text');
+  });
+})();
+</script>
+
+</body>
+</html>
