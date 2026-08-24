@@ -25,7 +25,9 @@
     --accent: #2b52ff;
     --nav-bg: rgba(250, 250, 247, 0.85);
     --media-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.05), inset 0 3px 14px rgba(17, 17, 17, 0.05);
-    --width: 620px;
+    --width: 640px;
+    --gutter: 24px;
+    --cell-hover: rgba(43, 82, 255, 0.06);
   }
 
   [data-theme="dark"] {
@@ -37,6 +39,7 @@
     --accent: #6f8bff;
     --nav-bg: rgba(18, 18, 20, 0.85);
     --media-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 3px 16px rgba(0, 0, 0, 0.4);
+    --cell-hover: rgba(111, 139, 255, 0.09);
   }
 
   * { box-sizing: border-box; }
@@ -45,7 +48,7 @@
 
   body {
     margin: 0;
-    background: var(--bg);
+    background-color: var(--bg);
     color: var(--text);
     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -55,10 +58,14 @@
 
   a { color: inherit; }
 
+  /* Grid frame — vertical rails bound the content column; each major
+     block is a bordered cell that tints on hover. */
   .wrap {
     max-width: var(--width);
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 var(--gutter);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
   }
 
   /* Nav */
@@ -68,38 +75,43 @@
     z-index: 10;
     background: var(--nav-bg);
     backdrop-filter: blur(8px);
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.3s ease, background-color 0.4s ease;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.4s ease;
   }
-
-  .nav.scrolled { border-bottom-color: var(--border); }
 
   .nav-inner {
     max-width: var(--width);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
     margin: 0 auto;
-    padding: 18px 24px;
+    padding: 16px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+    transition: background-color 0.15s ease;
   }
+
+  .nav-inner:hover { background-color: var(--cell-hover); }
 
   .nav-name {
     text-decoration: none;
     font-weight: 700;
     font-size: 14px;
     letter-spacing: -0.01em;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .nav-right {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 24px;
   }
 
   .nav-links {
     display: flex;
-    gap: 22px;
+    gap: 24px;
   }
 
   .nav-links a {
@@ -157,7 +169,7 @@
 
   /* Hero */
   .hero {
-    padding: 84px 0 72px;
+    padding: 88px 0 72px;
   }
 
   .eyebrow {
@@ -169,7 +181,7 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--text-dim);
-    margin: 0 0 22px;
+    margin: 0 0 24px;
   }
 
   .status-dot {
@@ -194,12 +206,20 @@
     100% { transform: scale(2.8); opacity: 0; }
   }
 
-  h1 {
-    font-size: clamp(32px, 6vw, 44px);
+  .hero-name {
+    font-size: clamp(44px, 10vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    margin: 0 0 16px;
+  }
+
+  h2.hero-tagline {
+    font-size: clamp(28px, 5vw, 38px);
     line-height: 1.15;
     letter-spacing: -0.02em;
     font-weight: 700;
-    margin: 0 0 22px;
+    margin: 0 0 24px;
   }
 
   .hero-and { color: var(--text-dim); font-weight: 500; }
@@ -208,18 +228,18 @@
     font-size: 17px;
     color: var(--text-dim);
     max-width: 52ch;
-    margin: 0 0 30px;
+    margin: 0 0 32px;
   }
 
   .hero-cta {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
     color: var(--text);
-    padding: 12px 20px;
+    padding: 16px 24px;
     border: 1px solid var(--border);
     border-radius: 999px;
     transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
@@ -239,7 +259,7 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--accent);
-    margin: 0 0 28px;
+    margin: 0 0 32px;
   }
 
   section { padding: 56px 0; }
@@ -250,7 +270,6 @@
   .project-list {
     display: flex;
     flex-direction: column;
-    gap: 64px;
   }
 
   .project-media {
@@ -259,8 +278,8 @@
     border-radius: 16px;
     background: var(--surface);
     box-shadow: var(--media-shadow);
-    padding: clamp(20px, 5vw, 36px);
-    margin-bottom: 22px;
+    padding: clamp(16px, 5vw, 40px);
+    margin-bottom: 24px;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, box-shadow 0.4s ease;
   }
 
@@ -301,7 +320,7 @@
     font-size: 22px;
     font-weight: 700;
     letter-spacing: -0.01em;
-    margin: 0 0 10px;
+    margin: 0 0 8px;
   }
 
   .project-line {
@@ -320,8 +339,12 @@
   .project {
     cursor: pointer;
     outline: none;
-    border-radius: 16px;
+    margin-left: calc(var(--gutter) * -1);
+    margin-right: calc(var(--gutter) * -1);
+    padding: 40px var(--gutter);
   }
+
+  .project + .project { border-top: 1px solid var(--border); }
 
   .project:focus-visible {
     box-shadow: 0 0 0 3px var(--accent);
@@ -329,7 +352,7 @@
 
   .project-view {
     display: inline-flex;
-    margin-top: 14px;
+    margin-top: 16px;
     font-size: 13px;
     font-weight: 600;
     color: var(--accent);
@@ -346,7 +369,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 48px 20px;
+    padding: 48px 24px;
     overflow-y: auto;
     background: rgba(10, 10, 12, 0.55);
     backdrop-filter: blur(4px);
@@ -365,7 +388,7 @@
     max-width: 720px;
     background: var(--bg);
     border-radius: 20px;
-    padding: 40px 36px 48px;
+    padding: 40px 40px 48px;
     position: relative;
     transform: translateY(18px) scale(0.98);
     opacity: 0;
@@ -401,13 +424,13 @@
 
   .modal-close svg { width: 14px; height: 14px; }
 
-  .modal-head { max-width: 56ch; margin-bottom: 28px; }
+  .modal-head { max-width: 56ch; margin-bottom: 32px; }
 
   .modal-title {
     font-size: 24px;
     font-weight: 700;
     letter-spacing: -0.01em;
-    margin: 0 0 10px;
+    margin: 0 0 8px;
   }
 
   .modal-gallery {
@@ -425,7 +448,7 @@
 
   @media (max-width: 560px) {
     .modal-overlay { padding: 0; }
-    .modal { max-width: none; min-height: 100%; border-radius: 0; padding: 32px 20px 40px; }
+    .modal { max-width: none; min-height: 100%; border-radius: 0; padding: 32px 24px 40px; }
   }
 
   /* About / Experience */
@@ -433,8 +456,8 @@
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 4px;
+    gap: 16px;
+    margin-bottom: 8px;
   }
 
   .role-head h3 {
@@ -454,7 +477,7 @@
     font-size: 14px;
     font-weight: 600;
     color: var(--accent);
-    margin: 0 0 12px;
+    margin: 0 0 16px;
   }
 
   .role-desc {
@@ -468,26 +491,29 @@
   .contact h2 {
     font-size: clamp(26px, 5vw, 34px);
     letter-spacing: -0.02em;
-    margin: 0 0 12px;
+    margin: 0 0 16px;
   }
 
   .contact-line {
     font-size: 15px;
     color: var(--text-dim);
-    margin: 0 0 28px;
+    margin: 0 0 32px;
   }
 
   .contact-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 16px;
   }
 
   .contact-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
-    padding: 12px 20px;
+    padding: 16px 24px;
     border: 1px solid var(--border);
     border-radius: 999px;
     transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
@@ -500,28 +526,42 @@
     transform: translateY(-2px);
   }
 
-  .contact-links a.primary {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-  }
-
-  .contact-links a.primary:hover {
-    background: #1f3fd6;
-    border-color: #1f3fd6;
+  .contact-links a svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
   }
 
   footer {
-    padding: 28px 0 56px;
+    padding: 32px 0 56px;
     font-size: 13px;
     color: var(--text-dim);
+    border-top: 1px solid var(--border);
+  }
+
+  /* Grid cells — each major block bleeds edge-to-edge to the rails on
+     .wrap and tints on hover. Declared last so it wins over the
+     section/footer padding shorthands above. */
+  .hero, .work, .about, .contact, footer {
+    margin-left: calc(var(--gutter) * -1);
+    margin-right: calc(var(--gutter) * -1);
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+    transition: background-color 0.15s ease;
+  }
+
+  .hero:hover, .work:hover, .about:hover, .contact:hover, footer:hover {
+    background-color: var(--cell-hover);
   }
 
   @media (max-width: 480px) {
     .hero { padding: 56px 0 48px; }
-    section { padding: 44px 0; }
-    .nav-inner { padding: 16px 20px; }
-    .wrap, .nav-inner { padding-left: 20px; padding-right: 20px; }
+    section { padding: 48px 0; }
+    .nav-inner { padding: 16px 24px; }
+    .wrap, .nav-inner { padding-left: 24px; padding-right: 24px; }
+    .nav-right { gap: 16px; }
+    .nav-links { gap: 12px; }
+    .nav-links a { font-size: 12px; }
   }
 </style>
 </head>
@@ -535,6 +575,7 @@
           <a href="#work">Work</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
+          <a href="utsav-saini-resume.pdf" target="_blank" rel="noopener">Resume</a>
         </nav>
         <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
           <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12.5A8.5 8.5 0 1 1 11.5 4a6.5 6.5 0 0 0 8.5 8.5Z"/></svg>
@@ -548,7 +589,8 @@
 
     <section class="hero">
       <p class="eyebrow"><span class="status-dot"></span> Product Designer — Open to new opportunities</p>
-      <h1>Obsessed with craft <span class="hero-and">and</span> function.</h1>
+      <h1 class="hero-name">Utsav Saini</h1>
+      <h2 class="hero-tagline">Obsessed with craft <span class="hero-and">and</span> function.</h2>
       <p class="hero-bio">
         I design dashboard interfaces for finance, supply-chain, and operations teams —
         turning complex, multi-step processes into visualizations people can actually
@@ -637,9 +679,13 @@
       <h2>Let's talk.</h2>
       <p class="contact-line">Open to new opportunities — reach out anytime.</p>
       <div class="contact-links">
-        <a class="primary" href="mailto:utsavsaini747@gmail.com">Email</a>
+        <a href="mailto:utsavsaini747@gmail.com">Email</a>
         <a href="https://www.linkedin.com/in/utsavsaini/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://x.com/utsav_saini" target="_blank" rel="noopener">X</a>
+        <a href="utsav-saini-resume.pdf" download="Utsav Saini - Resume.pdf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11m0 0-3.5-3.5M12 14l3.5-3.5"/><path d="M5 17v1.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V17"/></svg>
+          Download Resume
+        </a>
       </div>
     </section>
 
@@ -663,11 +709,6 @@
   </div>
 
 <script>
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 8);
-  }, { passive: true });
-
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
