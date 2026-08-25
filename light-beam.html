@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Light Beam</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #000000;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+  }
+  #fallback {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 14px;
+  }
+
+  #toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 11;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(20,18,28,0.7);
+    backdrop-filter: blur(6px);
+    color: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  #toggle:hover { background: rgba(40,36,56,0.85); }
+  #toggle svg { width: 16px; height: 16px; }
+
+  #panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 320px;
+    max-width: 86vw;
+    z-index: 10;
+    background: rgba(14,12,20,0.72);
+    backdrop-filter: blur(14px);
+    border-left: 1px solid rgba(255,255,255,0.1);
+    color: #e8e6f0;
+    overflow-y: auto;
+    padding: 60px 20px 32px;
+    box-sizing: border-box;
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+  }
+  #panel.hidden { transform: translateX(100%); }
+
+  #panel::-webkit-scrollbar { width: 8px; }
+  #panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+  .panel-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin: 0 0 4px;
+  }
+  .panel-sub {
+    font-size: 11px;
+    color: #8a869a;
+    margin: 0 0 20px;
+  }
+
+  .group {
+    margin-bottom: 22px;
+  }
+  .group-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #a48cff;
+    margin: 0 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .control { margin-bottom: 12px; }
+  .control-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 5px;
+  }
+  .control-head span:first-child {
+    font-size: 11.5px;
+    color: #cfccdc;
+  }
+  .control-head span:last-child {
+    font-size: 11px;
+    color: #8a869a;
+    font-variant-numeric: tabular-nums;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.14);
+    outline: none;
+    margin: 0;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #b39dff;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(179,157,255,0.7);
+    transition: transform 0.15s ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-moz-range-thumb {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #b39dff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(179,157,255,0.7);
+  }
+
+  #reset {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 8px;
+    color: #cfccdc;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  #reset:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+  .button-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .button-row button { margin-top: 0; flex: 1; }
+
+  #export {
+    background: rgba(163,140,255,0.16);
+    border: 1px solid rgba(163,140,255,0.4);
+    color: #d6ccff;
+  }
+  #export:hover { background: rgba(163,140,255,0.28); color: #fff; }
+
+  #exportPane {
+    margin-top: 12px;
+    display: none;
+  }
+  #exportPane.open { display: block; }
+
+  #exportOutput {
+    width: 100%;
+    height: 140px;
+    box-sizing: border-box;
+    resize: vertical;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    color: #cfe0ff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 10.5px;
+    line-height: 1.5;
+    padding: 10px;
+  }
+
+  #exportHint {
+    font-size: 10.5px;
+    color: #8a869a;
+    margin: 6px 0 0;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="gl"></canvas>
+<div id="fallback">WebGL is not available in this browser.</div>
+
+<button id="toggle" type="button" aria-label="Toggle controls">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h13M21 18h-1"/><circle cx="15" cy="6" r="2"/><circle cx="7" cy="12" r="2"/><circle cx="19" cy="18" r="2"/></svg>
+</button>
+
+<div id="panel">
+  <p class="panel-title">Light Beam Controls</p>
+  <p class="panel-sub">All changes apply in real time.</p>
+  <div id="controls"></div>
+  <div class="button-row">
+    <button id="export" type="button">Export settings</button>
+    <button id="reset" type="button">Reset to defaults</button>
+  </div>
+  <div id="exportPane">
+    <textarea id="exportOutput" readonly spellcheck="false"></textarea>
+    <p id="exportHint">Downloaded as light-beam-settings.json — the text above is also selected for copying.</p>
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById('gl');
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+  if (!gl) {
+    canvas.style.display = 'none';
+    document.getElementById('fallback').style.display = 'flex';
+    throw new Error('WebGL unavailable');
+  }
+
+  const vertexSrc = `
+    attribute vec2 a_position;
+    varying vec2 vUv;
+    void main() {
+      vUv = a_position * 0.5 + 0.5;
+      gl_Position = vec4(a_position, 0.0, 1.0);
+    }
+  `;
+
+  const fragmentSrc = `
+    precision highp float;
+    varying vec2 vUv;
+    uniform vec2 u_resolution;
+    uniform float u_time;
+    uniform float u_pxHeight;
+
+    uniform float u_baseWidth;
+    uniform float u_spreadMin;
+    uniform float u_coreThickness;
+    uniform float u_haloSpread;
+    uniform float u_bundleFan;
+    uniform float u_bundleCount;
+    uniform float u_bundleWobble;
+
+    uniform float u_swayAmount;
+    uniform float u_swaySpeed;
+    uniform float u_turbStrength;
+    uniform float u_turbSpeed;
+    uniform float u_turbScale;
+
+    uniform float u_coreBrightness;
+    uniform float u_haloBrightness;
+    uniform float u_heartBoost;
+    uniform float u_heartSize;
+    uniform float u_baseGlowSize;
+    uniform float u_baseGlowBrightness;
+    uniform float u_flareSize;
+    uniform float u_flareBrightness;
+
+    uniform float u_dustDensity;
+    uniform float u_dustSpeed;
+    uniform float u_dustSize;
+    uniform float u_dustBrightness;
+    uniform float u_dustReach;
+    uniform float u_dustFloor;
+
+    uniform float u_hueShift;
+    uniform float u_saturation;
+    uniform float u_colorBrightness;
+    uniform float u_bgBrightness;
+    uniform float u_vignette;
+
+    vec2 hash2(vec2 p) {
+      p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
+      return fract(sin(p) * 43758.5453123);
+    }
+
+    float hash1(vec2 p) {
+      return fract(sin(dot(p, vec2(41.3, 289.1))) * 43758.5453123);
+    }
+
+    float valueNoise(vec2 p) {
+      vec2 i = floor(p);
+      vec2 f = fract(p);
+      float a = hash1(i);
+      float b = hash1(i + vec2(1.0, 0.0));
+      float c = hash1(i + vec2(0.0, 1.0));
+      float d = hash1(i + vec2(1.0, 1.0));
+      vec2 u = f * f * (3.0 - 2.0 * f);
+      return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+    }
+
+    // One layer of drifting dust motes on a repeating grid. Always lit —
+    // brightness varies per-particle but never blinks over time.
+    float dustLayer(vec2 uv, float scale, float speed, float sizeMin, float sizeMax, float seed, out float shade) {
+      vec2 gv = uv * scale;
+      gv.y -= u_time * speed;
+      vec2 cell = floor(gv);
+      vec2 f = fract(gv) - 0.5;
+
+      vec2 rnd = hash2(cell + seed);
+      vec2 particlePos = (rnd - 0.5) * 0.8;
+      float dist = length(f - particlePos);
+
+      float size = mix(sizeMin, sizeMax, hash1(cell + seed + 3.7));
+      float glow = pow(clamp(1.0 - dist / max(size, 0.0001), 0.0, 1.0), 2.5);
+
+      shade = hash1(cell + seed + 9.1);
+      float brightness = 0.75 + 0.25 * shade;
+
+      return glow * brightness;
+    }
+
+    vec3 palette(float h) {
+      vec3 white  = vec3(0.96, 0.94, 1.0);
+      vec3 blue   = vec3(0.42, 0.55, 1.0);
+      vec3 purple = vec3(0.62, 0.28, 0.98);
+      vec3 c = mix(white, blue, smoothstep(0.0, 0.5, h));
+      c = mix(c, purple, smoothstep(0.5, 1.0, h));
+      return c;
+    }
+
+    vec3 hueRotate(vec3 c, float angle) {
+      float a = radians(angle);
+      float cA = cos(a);
+      float sA = sin(a);
+      float r = c.r * (0.213 + cA * 0.787 - sA * 0.213) + c.g * (0.715 - cA * 0.715 - sA * 0.715) + c.b * (0.072 - cA * 0.072 + sA * 0.928);
+      float g = c.r * (0.213 - cA * 0.213 + sA * 0.143) + c.g * (0.715 + cA * 0.285 + sA * 0.140) + c.b * (0.072 - cA * 0.072 - sA * 0.283);
+      float b = c.r * (0.213 - cA * 0.213 - sA * 0.787) + c.g * (0.715 - cA * 0.715 + sA * 0.715) + c.b * (0.072 + cA * 0.928 + sA * 0.072);
+      return max(vec3(r, g, b), 0.0);
+    }
+
+    vec3 adjustSaturation(vec3 c, float sat) {
+      float l = dot(c, vec3(0.2126, 0.7152, 0.0722));
+      return mix(vec3(l), c, sat);
+    }
+
+    void main() {
+      vec2 res = u_resolution;
+      vec2 uv = vUv - 0.5;
+      uv.x *= res.x / res.y;
+
+      float heightT = clamp(vUv.y, 0.0, 1.0); // 0 at bottom (origin), 1 at top (tip)
+
+      float baseHalfWidth = (u_baseWidth / u_pxHeight) * 0.5;
+
+      // Broad at the base, narrows as it rises — a jet nozzle profile.
+      float taper = smoothstep(0.0, 1.0, heightT);
+      float spread = mix(1.0, u_spreadMin, taper);
+
+      // Gentle whip near the narrow tip; anchored and steady at the wide base.
+      float sway = (sin(heightT * 3.0 + u_time * u_swaySpeed) * u_swayAmount
+                 + sin(heightT * 7.0 - u_time * u_swaySpeed * 0.45) * u_swayAmount * 0.36)
+                 * mix(0.15, 1.0, taper);
+      float beamX = sway;
+
+      // Fast vertical turbulence — the "jet" texture blasting straight up.
+      float streaks = valueNoise(vec2(uv.x * u_turbScale, heightT * 5.0 - u_time * u_turbSpeed));
+      float energy = (1.0 - u_turbStrength) + u_turbStrength * streaks;
+
+      float coreWidth = baseHalfWidth * u_coreThickness * spread;
+      float haloWidth = baseHalfWidth * u_haloSpread * spread;
+      float bundleFan = baseHalfWidth * u_bundleFan * spread;
+
+      vec3 col = vec3(u_bgBrightness);
+
+      // Bundle of several filaments fanning out at the base and converging
+      // near the tip — builds up extra brightness right at the centerline.
+      float core = 0.0;
+      float halo = 0.0;
+      const int MAX_BUNDLES = 12;
+      float bundleHalfCount = max((u_bundleCount - 1.0) * 0.5, 0.0001);
+      for (int i = 0; i < MAX_BUNDLES; i++) {
+        if (float(i) < u_bundleCount) {
+          float fi = (float(i) - (u_bundleCount - 1.0) * 0.5) / bundleHalfCount;
+          float off = fi * bundleFan;
+          float wob = sin(u_time * 1.4 + fi * 2.1 + heightT * 4.0) * u_bundleWobble * coreWidth;
+          float dd = abs(uv.x - beamX - off - wob);
+          core += exp(-pow(dd / max(coreWidth, 0.0001), 2.0));
+          halo += exp(-pow(dd / max(haloWidth, 0.0001), 2.0));
+        }
+      }
+
+      // The heart of the beam — a sharp extra-bright concentration right
+      // at the base, fading out quickly with height.
+      float heartBoost = 1.0 + u_heartBoost * exp(-pow(heightT / max(u_heartSize, 0.0001), 2.0));
+
+      // Extra concentration of volume pooling at the base.
+      float baseGlow = exp(-pow(heightT / max(u_baseGlowSize, 0.0001), 2.0))
+                      * exp(-pow((uv.x - beamX) / (baseHalfWidth * 2.2), 2.0));
+
+      float d = uv.x - beamX;
+      float ad = abs(d);
+
+      vec3 coreColor = vec3(0.98, 0.95, 1.0);
+      vec3 haloColor = palette(clamp(ad / max(haloWidth, 0.0001), 0.0, 1.0));
+
+      col += coreColor * core * energy * heartBoost * u_coreBrightness;
+      col += haloColor * halo * energy * heartBoost * u_haloBrightness;
+      col += palette(0.7) * baseGlow * u_baseGlowBrightness;
+
+      // Bright flare pooling at the base — the origin of the jet.
+      vec2 flareUv = uv - vec2(beamX, -0.49);
+      flareUv.y *= 1.8;
+      float flare = exp(-pow(length(flareUv) / max(baseHalfWidth * u_flareSize, 0.0001), 2.0));
+      col += coreColor * flare * u_flareBrightness;
+
+      // Dust motes — concentrated in and around the beam, three parallax layers.
+      float zone = exp(-pow(ad / (haloWidth * u_dustReach + 0.015), 2.0));
+      zone = mix(u_dustFloor, 1.0, zone);
+
+      float s1; float s2; float s3;
+      float dust = 0.0;
+      dust += dustLayer(uv, 16.0 * u_dustDensity, 0.05 * u_dustSpeed, 0.05 * u_dustSize, 0.09 * u_dustSize, 1.0, s1) * 0.85;
+      dust += dustLayer(uv, 26.0 * u_dustDensity, 0.08 * u_dustSpeed, 0.035 * u_dustSize, 0.065 * u_dustSize, 41.0, s2) * 0.7;
+      dust += dustLayer(uv, 40.0 * u_dustDensity, 0.12 * u_dustSpeed, 0.02 * u_dustSize, 0.045 * u_dustSize, 87.0, s3) * 0.55;
+      float dustShade = (s1 + s2 + s3) / 3.0;
+
+      col += palette(dustShade) * dust * zone * u_dustBrightness;
+
+      // Vignette.
+      float vig = smoothstep(1.05, 0.3, length(vUv - 0.5));
+      col *= mix(1.0 - u_vignette, 1.0, vig);
+
+      col = hueRotate(col, u_hueShift);
+      col = adjustSaturation(col, u_saturation);
+      col *= u_colorBrightness;
+
+      // Tonemap + gamma.
+      col = col / (1.0 + col);
+      col = pow(col, vec3(0.4545));
+
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `;
+
+  function compileShader(type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      console.error(gl.getShaderInfoLog(shader));
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  }
+
+  const vs = compileShader(gl.VERTEX_SHADER, vertexSrc);
+  const fs = compileShader(gl.FRAGMENT_SHADER, fragmentSrc);
+
+  const program = gl.createProgram();
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.error(gl.getProgramInfoLog(program));
+  }
+  gl.useProgram(program);
+
+  // One triangle covering the full clip space — no quad needed.
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    -1, -1,
+     3, -1,
+    -1,  3,
+  ]), gl.STATIC_DRAW);
+
+  const positionLoc = gl.getAttribLocation(program, 'a_position');
+  gl.enableVertexAttribArray(positionLoc);
+  gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+
+  const u_resolution = gl.getUniformLocation(program, 'u_resolution');
+  const u_time = gl.getUniformLocation(program, 'u_time');
+  const u_pxHeight = gl.getUniformLocation(program, 'u_pxHeight');
+
+  // --- Tweakable parameters --------------------------------------------
+  const CONTROLS = [
+    { key: 'baseWidth',          label: 'Base Width (px)',     group: 'Shape',      min: 100,  max: 500,  step: 1,    def: 235 },
+    { key: 'spreadMin',          label: 'Tip Width %',         group: 'Shape',      min: 0.02, max: 1,    step: 0.01, def: 0.16 },
+    { key: 'coreThickness',      label: 'Core Thickness',      group: 'Shape',      min: 0.1,  max: 0.6,  step: 0.01, def: 0.32 },
+    { key: 'haloSpread',         label: 'Halo Spread',         group: 'Shape',      min: 0.3,  max: 1.8,  step: 0.01, def: 0.95 },
+    { key: 'bundleFan',          label: 'Bundle Fan',          group: 'Shape',      min: 0.1,  max: 1.2,  step: 0.01, def: 0.5 },
+    { key: 'bundleCount',        label: 'Bundle Count',        group: 'Shape',      min: 1,    max: 12,   step: 1,    def: 7 },
+    { key: 'bundleWobble',       label: 'Bundle Wobble',       group: 'Shape',      min: 0,    max: 0.5,  step: 0.01, def: 0.15 },
+
+    { key: 'swayAmount',         label: 'Sway Amount',         group: 'Motion',     min: 0,    max: 0.15, step: 0.005, def: 0.05 },
+    { key: 'swaySpeed',          label: 'Sway Speed',          group: 'Motion',     min: 0,    max: 1,    step: 0.01, def: 0.2 },
+    { key: 'turbStrength',       label: 'Turbulence Strength', group: 'Motion',     min: 0,    max: 0.6,  step: 0.01, def: 0.18 },
+    { key: 'turbSpeed',          label: 'Turbulence Speed',    group: 'Motion',     min: 0,    max: 8,    step: 0.1,  def: 3.2 },
+    { key: 'turbScale',          label: 'Turbulence Scale',    group: 'Motion',     min: 5,    max: 80,   step: 1,    def: 30 },
+
+    { key: 'coreBrightness',     label: 'Core Brightness',     group: 'Brightness', min: 0.5,  max: 6,    step: 0.05, def: 2.6 },
+    { key: 'haloBrightness',     label: 'Halo Brightness',     group: 'Brightness', min: 0,    max: 2,    step: 0.02, def: 0.55 },
+    { key: 'heartBoost',         label: 'Heart Brightness',    group: 'Brightness', min: 0,    max: 10,   step: 0.1,  def: 4.0 },
+    { key: 'heartSize',          label: 'Heart Size',          group: 'Brightness', min: 0.02, max: 0.4,  step: 0.005, def: 0.09 },
+    { key: 'baseGlowSize',       label: 'Base Glow Size',      group: 'Brightness', min: 0.05, max: 0.5,  step: 0.005, def: 0.14 },
+    { key: 'baseGlowBrightness', label: 'Base Glow Brightness',group: 'Brightness', min: 0,    max: 5,    step: 0.05, def: 2.4 },
+    { key: 'flareSize',          label: 'Flare Size',          group: 'Brightness', min: 0.1,  max: 1.5,  step: 0.01, def: 0.6 },
+    { key: 'flareBrightness',    label: 'Flare Brightness',    group: 'Brightness', min: 0,    max: 6,    step: 0.05, def: 3.2 },
+
+    { key: 'dustDensity',        label: 'Dust Density',        group: 'Dust',       min: 0.3,  max: 3,    step: 0.05, def: 1.0 },
+    { key: 'dustSpeed',          label: 'Dust Speed',          group: 'Dust',       min: 0,    max: 3,    step: 0.05, def: 1.0 },
+    { key: 'dustSize',           label: 'Dust Size',           group: 'Dust',       min: 0.2,  max: 3,    step: 0.05, def: 1.0 },
+    { key: 'dustBrightness',     label: 'Dust Brightness',     group: 'Dust',       min: 0,    max: 3,    step: 0.05, def: 1.0 },
+    { key: 'dustReach',          label: 'Dust Reach',          group: 'Dust',       min: 0.5,  max: 4,    step: 0.05, def: 2.4 },
+    { key: 'dustFloor',          label: 'Dust Ambient Floor',  group: 'Dust',       min: 0,    max: 0.5,  step: 0.01, def: 0.1 },
+
+    { key: 'hueShift',           label: 'Hue Shift',           group: 'Color',      min: 0,    max: 360,  step: 1,    def: 0 },
+    { key: 'saturation',         label: 'Saturation',          group: 'Color',      min: 0,    max: 1.5,  step: 0.01, def: 1.0 },
+    { key: 'colorBrightness',    label: 'Palette Brightness',  group: 'Color',      min: 0.3,  max: 2,    step: 0.01, def: 1.0 },
+    { key: 'bgBrightness',       label: 'Background Lift',     group: 'Color',      min: 0,    max: 0.3,  step: 0.005, def: 0.0 },
+    { key: 'vignette',           label: 'Vignette Strength',   group: 'Color',      min: 0,    max: 1,    step: 0.01, def: 0.45 },
+  ];
+
+  const params = {};
+  const uniformLocs = {};
+  CONTROLS.forEach((c) => {
+    params[c.key] = c.def;
+    uniformLocs[c.key] = gl.getUniformLocation(program, 'u_' + c.key);
+  });
+
+  function decimalsFromStep(step) {
+    const s = String(step);
+    return s.includes('.') ? s.split('.')[1].length : 0;
+  }
+
+  function buildPanel() {
+    const container = document.getElementById('controls');
+    const groups = {};
+    CONTROLS.forEach((c) => {
+      if (!groups[c.group]) groups[c.group] = [];
+      groups[c.group].push(c);
+    });
+
+    Object.keys(groups).forEach((groupName) => {
+      const groupEl = document.createElement('div');
+      groupEl.className = 'group';
+
+      const title = document.createElement('p');
+      title.className = 'group-title';
+      title.textContent = groupName;
+      groupEl.appendChild(title);
+
+      groups[groupName].forEach((c) => {
+        const row = document.createElement('div');
+        row.className = 'control';
+
+        const head = document.createElement('div');
+        head.className = 'control-head';
+        const labelEl = document.createElement('span');
+        labelEl.textContent = c.label;
+        const valueEl = document.createElement('span');
+        valueEl.id = 'val-' + c.key;
+        valueEl.textContent = c.def.toFixed(decimalsFromStep(c.step));
+        head.appendChild(labelEl);
+        head.appendChild(valueEl);
+
+        const input = document.createElement('input');
+        input.type = 'range';
+        input.min = c.min;
+        input.max = c.max;
+        input.step = c.step;
+        input.value = c.def;
+        input.id = 'ctl-' + c.key;
+        input.addEventListener('input', () => {
+          const v = parseFloat(input.value);
+          params[c.key] = v;
+          valueEl.textContent = v.toFixed(decimalsFromStep(c.step));
+        });
+
+        row.appendChild(head);
+        row.appendChild(input);
+        groupEl.appendChild(row);
+      });
+
+      container.appendChild(groupEl);
+    });
+  }
+  buildPanel();
+
+  document.getElementById('reset').addEventListener('click', () => {
+    CONTROLS.forEach((c) => {
+      params[c.key] = c.def;
+      document.getElementById('ctl-' + c.key).value = c.def;
+      document.getElementById('val-' + c.key).textContent = c.def.toFixed(decimalsFromStep(c.step));
+    });
+  });
+
+  document.getElementById('export').addEventListener('click', () => {
+    const ordered = {};
+    CONTROLS.forEach((c) => { ordered[c.key] = params[c.key]; });
+    const json = JSON.stringify(ordered, null, 2);
+
+    const output = document.getElementById('exportOutput');
+    output.value = json;
+    document.getElementById('exportPane').classList.add('open');
+    output.focus();
+    output.select();
+
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'light-beam-settings.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  const toggle = document.getElementById('toggle');
+  const panel = document.getElementById('panel');
+  toggle.addEventListener('click', () => panel.classList.toggle('hidden'));
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.floor(window.innerWidth * dpr);
+    const h = Math.floor(window.innerHeight * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+      gl.viewport(0, 0, w, h);
+    }
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const start = performance.now();
+  function frame(now) {
+    resize();
+    const t = (now - start) / 1000;
+    gl.uniform2f(u_resolution, canvas.width, canvas.height);
+    gl.uniform1f(u_time, t);
+    gl.uniform1f(u_pxHeight, window.innerHeight);
+    CONTROLS.forEach((c) => {
+      gl.uniform1f(uniformLocs[c.key], params[c.key]);
+    });
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+</script>
+
+</body>
+</html>

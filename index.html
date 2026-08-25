@@ -1,570 +1,750 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Utsav Saini — Product Designer</title>
-<meta name="description" content="Utsav Saini is a Product Designer focused on dashboard interfaces for finance, supply-chain, and operations teams. Open to new opportunities.">
-<script>
-  (function () {
-    var stored = localStorage.getItem('theme');
-    var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', theme);
-  })();
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #fafaf7;
-    --surface: #f0efe9;
-    --border: #e4e2da;
-    --text: #16161a;
-    --text-dim: #6c6c74;
-    --accent: #2b52ff;
-    --nav-bg: rgba(250, 250, 247, 0.85);
-    --media-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.05), inset 0 3px 14px rgba(17, 17, 17, 0.05);
-    --width: 640px;
-    --gutter: 24px;
-    --cell-hover: rgba(43, 82, 255, 0.06);
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utsav Saini — Product Designer</title>
+  <meta name="description"
+    content="Utsav Saini is a Product Designer focused on dashboard interfaces for finance, supply-chain, and operations teams. Open to new opportunities.">
+  <script>
+    (function () {
+      var stored = localStorage.getItem('theme');
+      var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fafaf7;
+      --surface: #f0efe9;
+      --border: #e4e2da;
+      --text: #16161a;
+      --text-dim: #6c6c74;
+      --accent: #2b52ff;
+      --nav-bg: rgba(250, 250, 247, 0.85);
+      --media-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.05), inset 0 3px 14px rgba(17, 17, 17, 0.05);
+      --width: 640px;
+      --gutter: 24px;
+      --cell-hover: rgba(249, 251, 255, 0.979);
+    }
 
-  [data-theme="dark"] {
-    --bg: #121214;
-    --surface: #1c1c20;
-    --border: #2b2b30;
-    --text: #f3f2ee;
-    --text-dim: #9b9aa1;
-    --accent: #6f8bff;
-    --nav-bg: rgba(18, 18, 20, 0.85);
-    --media-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 3px 16px rgba(0, 0, 0, 0.4);
-    --cell-hover: rgba(111, 139, 255, 0.09);
-  }
+    [data-theme="dark"] {
+      --bg: #121214;
+      --surface: #1c1c20;
+      --border: #2b2b30;
+      --text: #f3f2ee;
+      --text-dim: #9b9aa1;
+      --accent: #6f8bff;
+      --nav-bg: rgba(18, 18, 20, 0.85);
+      --media-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 3px 16px rgba(0, 0, 0, 0.4);
+      --cell-hover: rgba(0, 0, 0, 0.364);
+    }
 
-  * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-  html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
-  body {
-    margin: 0;
-    background-color: var(--bg);
-    color: var(--text);
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    line-height: 1.5;
-    transition: background-color 0.4s ease, color 0.4s ease;
-  }
+    body {
+      margin: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
 
-  a { color: inherit; }
+    a {
+      color: inherit;
+    }
 
-  /* Grid frame — vertical rails bound the content column; each major
+    /* Grid frame — vertical rails bound the content column; each major
      block is a bordered cell that tints on hover. */
-  .wrap {
-    max-width: var(--width);
-    margin: 0 auto;
-    padding: 0 var(--gutter);
-    border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-  }
-
-  /* Nav */
-  .nav {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: var(--nav-bg);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--border);
-    transition: background-color 0.4s ease;
-  }
-
-  .nav-inner {
-    max-width: var(--width);
-    border-left: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-    margin: 0 auto;
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    transition: background-color 0.15s ease;
-  }
-
-  .nav-inner:hover { background-color: var(--cell-hover); }
-
-  .nav-name {
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: -0.01em;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 24px;
-  }
-
-  .nav-links a {
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-dim);
-    transition: color 0.2s ease;
-  }
-
-  .nav-links a:hover { color: var(--text); }
-
-  .theme-toggle {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    background: transparent;
-    color: var(--text);
-    cursor: pointer;
-    padding: 0;
-    transition: background-color 0.25s ease, border-color 0.4s ease, transform 0.25s ease;
-  }
-
-  .theme-toggle:hover {
-    background: var(--surface);
-    transform: translateY(-1px);
-  }
-
-  .theme-toggle svg {
-    width: 15px;
-    height: 15px;
-  }
-
-  .theme-toggle .icon-sun { display: none; }
-
-  [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
-  [data-theme="dark"] .theme-toggle .icon-sun { display: block; }
-
-  /* Reveal animation */
-  .reveal {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .reveal.in-view {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Hero */
-  .hero {
-    padding: 88px 0 72px;
-  }
-
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin: 0 0 24px;
-  }
-
-  .status-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #2bb673;
-    position: relative;
-  }
-
-  .status-dot::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: #2bb673;
-    animation: pulse 2s ease-out infinite;
-  }
-
-  @keyframes pulse {
-    0% { transform: scale(1); opacity: 0.6; }
-    100% { transform: scale(2.8); opacity: 0; }
-  }
-
-  .hero-name {
-    font-size: clamp(44px, 10vw, 72px);
-    line-height: 1.02;
-    letter-spacing: -0.03em;
-    font-weight: 800;
-    margin: 0 0 16px;
-  }
-
-  h2.hero-tagline {
-    font-size: clamp(28px, 5vw, 38px);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    font-weight: 700;
-    margin: 0 0 24px;
-  }
-
-  .hero-and { color: var(--text-dim); font-weight: 500; }
-
-  .hero-bio {
-    font-size: 17px;
-    color: var(--text-dim);
-    max-width: 52ch;
-    margin: 0 0 32px;
-  }
-
-  .hero-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    color: var(--text);
-    padding: 16px 24px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
-  }
-
-  .hero-cta:hover {
-    background: var(--text);
-    color: var(--bg);
-    border-color: var(--text);
-    transform: translateY(-2px);
-  }
-
-  /* Section label */
-  .section-label {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin: 0 0 32px;
-  }
-
-  section { padding: 56px 0; }
-
-  section + section { border-top: 1px solid var(--border); }
-
-  /* Work */
-  .project-list {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .project-media {
-    position: relative;
-    min-height: 200px;
-    border-radius: 16px;
-    background: var(--surface);
-    box-shadow: var(--media-shadow);
-    padding: clamp(16px, 5vw, 40px);
-    margin-bottom: 24px;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, box-shadow 0.4s ease;
-  }
-
-  .project:hover .project-media { transform: translateY(-4px); }
-
-  .project-media-placeholder {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 24px;
-    font-size: 12px;
-    color: var(--text-dim);
-    font-weight: 500;
-  }
-
-  .project-media img {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 8px;
-  }
-
-  .project-tag {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin: 0 0 8px;
-  }
-
-  .project-title {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    margin: 0 0 8px;
-  }
-
-  .project-line {
-    font-size: 15px;
-    font-weight: 600;
-    margin: 0 0 8px;
-  }
-
-  .project-desc {
-    font-size: 15px;
-    color: var(--text-dim);
-    margin: 0;
-    max-width: 56ch;
-  }
-
-  .project {
-    cursor: pointer;
-    outline: none;
-    margin-left: calc(var(--gutter) * -1);
-    margin-right: calc(var(--gutter) * -1);
-    padding: 40px var(--gutter);
-  }
-
-  .project + .project { border-top: 1px solid var(--border); }
-
-  .project:focus-visible {
-    box-shadow: 0 0 0 3px var(--accent);
-  }
-
-  .project-view {
-    display: inline-flex;
-    margin-top: 16px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--accent);
-    transition: transform 0.25s ease;
-  }
-
-  .project:hover .project-view { transform: translateX(4px); }
-
-  /* Project modal */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 48px 24px;
-    overflow-y: auto;
-    background: rgba(10, 10, 12, 0.55);
-    backdrop-filter: blur(4px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-
-  .modal-overlay.open {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .modal {
-    width: 100%;
-    max-width: 720px;
-    background: var(--bg);
-    border-radius: 20px;
-    padding: 40px 40px 48px;
-    position: relative;
-    transform: translateY(18px) scale(0.98);
-    opacity: 0;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, background-color 0.4s ease;
-  }
-
-  .modal-overlay.open .modal {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-
-  .modal-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 34px;
-    height: 34px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    background: var(--bg);
-    color: var(--text);
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-  }
-
-  .modal-close:hover {
-    background: var(--surface);
-    transform: rotate(90deg);
-  }
-
-  .modal-close svg { width: 14px; height: 14px; }
-
-  .modal-head { max-width: 56ch; margin-bottom: 32px; }
-
-  .modal-title {
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    margin: 0 0 8px;
-  }
-
-  .modal-gallery {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .modal-gallery img {
-    width: 100%;
-    display: block;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-  }
-
-  @media (max-width: 560px) {
-    .modal-overlay { padding: 0; }
-    .modal { max-width: none; min-height: 100%; border-radius: 0; padding: 32px 24px 40px; }
-  }
-
-  /* About / Experience */
-  .role-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 8px;
-  }
-
-  .role-head h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0;
-  }
-
-  .role-dates {
-    font-size: 13px;
-    color: var(--text-dim);
-    font-weight: 500;
-    white-space: nowrap;
-  }
-
-  .role-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--accent);
-    margin: 0 0 16px;
-  }
-
-  .role-desc {
-    font-size: 15px;
-    color: var(--text-dim);
-    margin: 0;
-    max-width: 56ch;
-  }
-
-  /* Contact */
-  .contact h2 {
-    font-size: clamp(26px, 5vw, 34px);
-    letter-spacing: -0.02em;
-    margin: 0 0 16px;
-  }
-
-  .contact-line {
-    font-size: 15px;
-    color: var(--text-dim);
-    margin: 0 0 32px;
-  }
-
-  .contact-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .contact-links a {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 16px 24px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
-  }
-
-  .contact-links a:hover {
-    background: var(--text);
-    color: var(--bg);
-    border-color: var(--text);
-    transform: translateY(-2px);
-  }
-
-  .contact-links a svg {
-    width: 14px;
-    height: 14px;
-    flex-shrink: 0;
-  }
-
-  footer {
-    padding: 32px 0 56px;
-    font-size: 13px;
-    color: var(--text-dim);
-    border-top: 1px solid var(--border);
-  }
-
-  /* Grid cells — each major block bleeds edge-to-edge to the rails on
+    .wrap {
+      max-width: var(--width);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+
+    /* Nav */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--nav-bg);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      transition: background-color 0.4s ease;
+    }
+
+    .nav-inner {
+      max-width: var(--width);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: background-color 0.15s ease;
+    }
+
+    .nav-inner:hover {
+      background-color: var(--cell-hover);
+    }
+
+    .nav-name {
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-dim);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .theme-toggle {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0;
+      transition: background-color 0.25s ease, border-color 0.4s ease, transform 0.25s ease;
+    }
+
+    .theme-toggle:hover {
+      background: var(--surface);
+      transform: translateY(-1px);
+    }
+
+    .theme-toggle svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .theme-toggle .icon-sun {
+      display: none;
+    }
+
+    [data-theme="dark"] .theme-toggle .icon-moon {
+      display: none;
+    }
+
+    [data-theme="dark"] .theme-toggle .icon-sun {
+      display: block;
+    }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 88px 0 72px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin: 0 0 24px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #2bb673;
+      position: relative;
+    }
+
+    .status-dot::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: #2bb673;
+      animation: pulse 2s ease-out infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+
+      100% {
+        transform: scale(2.8);
+        opacity: 0;
+      }
+    }
+
+    .hero-name {
+      font-size: clamp(44px, 10vw, 72px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      margin: 0 0 16px;
+    }
+
+    h2.hero-tagline {
+      font-size: clamp(28px, 5vw, 38px);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+      margin: 0 0 24px;
+    }
+
+    .hero-and {
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .hero-bio {
+      font-size: 17px;
+      color: var(--text-dim);
+      max-width: 52ch;
+      margin: 0 0 32px;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--text);
+      padding: 16px 24px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .hero-cta:hover {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+      transform: translateY(-2px);
+    }
+
+    /* Section label */
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 32px;
+    }
+
+    section {
+      padding: 56px 0;
+    }
+
+    section+section {
+      border-top: 1px solid var(--border);
+    }
+
+    /* Work */
+    .project-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-media {
+      position: relative;
+      min-height: 200px;
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: var(--media-shadow);
+      padding: clamp(16px, 5vw, 40px);
+      margin-bottom: 24px;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .project:hover .project-media {
+      transform: translateY(-4px);
+    }
+
+    .project-media-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .project-media img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .project-tag {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 8px;
+    }
+
+    .project-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin: 0 0 8px;
+    }
+
+    .project-line {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0 0 8px;
+    }
+
+    .project-desc {
+      font-size: 15px;
+      color: var(--text-dim);
+      margin: 0;
+      max-width: 56ch;
+    }
+
+    .project {
+      cursor: pointer;
+      outline: none;
+      margin-left: calc(var(--gutter) * -1);
+      margin-right: calc(var(--gutter) * -1);
+      padding: 40px var(--gutter);
+      transition: background-color 0.15s ease;
+    }
+
+    .project+.project {
+      border-top: 1px solid var(--border);
+    }
+
+    .project:hover {
+      background-color: var(--cell-hover);
+    }
+
+    .project:focus-visible {
+      box-shadow: 0 0 0 3px var(--accent);
+    }
+
+    .project-view {
+      display: inline-flex;
+      margin-top: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      transition: transform 0.25s ease;
+    }
+
+    .project:hover .project-view {
+      transform: translateX(4px);
+    }
+
+    /* Project modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 24px;
+      overflow-y: auto;
+      background: rgba(10, 10, 12, 0.55);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: min(1400px, 80vw);
+      background: var(--bg);
+      border-radius: 20px;
+      padding: 40px 40px 48px;
+      position: relative;
+      transform: translateY(18px) scale(0.98);
+      opacity: 0;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, background-color 0.4s ease;
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: var(--surface);
+      transform: rotate(90deg);
+    }
+
+    .modal-close svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .modal-head {
+      max-width: 56ch;
+      margin-bottom: 32px;
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin: 0 0 8px;
+    }
+
+    .carousel {
+      position: relative;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .carousel-frame {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 320px;
+    }
+
+    .carousel-frame img {
+      max-width: 100%;
+      max-height: 70vh;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .carousel-btn:hover {
+      background: var(--surface);
+    }
+
+    .carousel-btn.prev {
+      left: 16px;
+    }
+
+    .carousel-btn.next {
+      right: 16px;
+    }
+
+    .carousel-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .carousel-counter {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.55);
+      padding: 5px 12px;
+      border-radius: 999px;
+      backdrop-filter: blur(4px);
+    }
+
+    @media (max-width: 560px) {
+      .modal-overlay {
+        padding: 0;
+      }
+
+      .modal {
+        max-width: none;
+        min-height: 100%;
+        border-radius: 0;
+        padding: 32px 24px 40px;
+      }
+
+      .carousel-btn {
+        width: 38px;
+        height: 38px;
+      }
+
+      .carousel-btn.prev {
+        left: 8px;
+      }
+
+      .carousel-btn.next {
+        right: 8px;
+      }
+    }
+
+    /* About / Experience */
+    .role-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .role-head h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .role-dates {
+      font-size: 13px;
+      color: var(--text-dim);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .role-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 0 0 16px;
+    }
+
+    .role-desc {
+      font-size: 15px;
+      color: var(--text-dim);
+      margin: 0;
+      max-width: 56ch;
+    }
+
+    .role+.role {
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .role-media {
+      margin: 20px 0 0;
+      max-width: 320px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .role-media img {
+      width: 100%;
+      display: block;
+    }
+
+    /* Contact */
+    .contact h2 {
+      font-size: clamp(26px, 5vw, 34px);
+      letter-spacing: -0.02em;
+      margin: 0 0 16px;
+    }
+
+    .contact-line {
+      font-size: 15px;
+      color: var(--text-dim);
+      margin: 0 0 32px;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .contact-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 16px 24px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .contact-links a:hover {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+      transform: translateY(-2px);
+    }
+
+    .contact-links a svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    footer {
+      padding: 32px 0 56px;
+      font-size: 13px;
+      color: var(--text-dim);
+      border-top: 1px solid var(--border);
+    }
+
+    /* Grid cells — each major block bleeds edge-to-edge to the rails on
      .wrap and tints on hover. Declared last so it wins over the
      section/footer padding shorthands above. */
-  .hero, .work, .about, .contact, footer {
-    margin-left: calc(var(--gutter) * -1);
-    margin-right: calc(var(--gutter) * -1);
-    padding-left: var(--gutter);
-    padding-right: var(--gutter);
-    transition: background-color 0.15s ease;
-  }
+    .hero,
+    .work,
+    .about,
+    .contact,
+    footer {
+      margin-left: calc(var(--gutter) * -1);
+      margin-right: calc(var(--gutter) * -1);
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+      transition: background-color 0.15s ease;
+    }
 
-  .hero:hover, .work:hover, .about:hover, .contact:hover, footer:hover {
-    background-color: var(--cell-hover);
-  }
+    .hero:hover,
+    .about:hover,
+    .contact:hover,
+    footer:hover {
+      background-color: var(--cell-hover);
+    }
 
-  @media (max-width: 480px) {
-    .hero { padding-top: 56px; padding-bottom: 48px; }
-    section { padding: 48px 0; }
-    .nav-inner { padding: 16px 24px; }
-    .wrap, .nav-inner { padding-left: 24px; padding-right: 24px; }
-    .nav-right { gap: 16px; }
-    .nav-links { gap: 12px; }
-    .nav-links a { font-size: 12px; }
-  }
-</style>
+    @media (max-width: 480px) {
+      .hero {
+        padding-top: 56px;
+        padding-bottom: 48px;
+      }
+
+      section {
+        padding: 48px 0;
+      }
+
+      .nav-inner {
+        padding: 16px 24px;
+      }
+
+      .wrap,
+      .nav-inner {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .nav-right {
+        gap: 16px;
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+
+      .nav-links a {
+        font-size: 12px;
+      }
+    }
+
+  </style>
 </head>
+
 <body>
 
   <header class="nav" id="nav">
@@ -578,8 +758,16 @@
           <a href="utsav-saini-resume.pdf" target="_blank" rel="noopener">Resume</a>
         </nav>
         <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12.5A8.5 8.5 0 1 1 11.5 4a6.5 6.5 0 0 0 8.5 8.5Z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2.5M12 19v2.5M4.5 12H2M22 12h-2.5M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12.5A8.5 8.5 0 1 1 11.5 4a6.5 6.5 0 0 0 8.5 8.5Z" />
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4.5" />
+            <path
+              d="M12 2.5v2.5M12 19v2.5M4.5 12H2M22 12h-2.5M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8" />
+          </svg>
         </button>
       </div>
     </div>
@@ -606,8 +794,11 @@
 
         <article class="project reveal" data-project="process-pulse" tabindex="0" role="button" aria-haspopup="dialog">
           <div class="project-media">
-            <div class="project-media-placeholder">Add screenshot — save as<br><code>images/process-pulse.png</code></div>
-            <img src="images/PTP%20Process%20Pulse.png" alt="Process Pulse — a Sankey-style dashboard tracing a procure-to-pay process" loading="lazy" onerror="this.style.display='none'">
+            <div class="project-media-placeholder">Add screenshot — save as<br><code>images/process-pulse.png</code>
+            </div>
+            <img src="images/PTP%20Process%20Pulse.png"
+              alt="Process Pulse — a Sankey-style dashboard tracing a procure-to-pay process" loading="lazy"
+              onerror="this.style.display='none'">
           </div>
           <p class="project-tag">Finance · Data Visualization</p>
           <h3 class="project-title">Process Pulse</h3>
@@ -624,11 +815,14 @@
         <article class="project reveal" data-project="reckoner" tabindex="0" role="button" aria-haspopup="dialog">
           <div class="project-media">
             <div class="project-media-placeholder">Add screenshot — save as<br><code>images/reckoner.png</code></div>
-            <img src="images/Reckoner%20Data%20Summary%2001.png" alt="Reckoner — a forecasting workbench comparing statistical models" loading="lazy" onerror="this.style.display='none'">
+            <img src="images/Reckoner%20Data%20Summary%2001.png"
+              alt="Reckoner — a forecasting workbench comparing statistical models" loading="lazy"
+              onerror="this.style.display='none'">
           </div>
           <p class="project-tag">Supply Chain · Forecasting</p>
           <h3 class="project-title">Reckoner</h3>
-          <p class="project-line">A forecasting workbench that makes seven statistical models feel like one simple decision.</p>
+          <p class="project-line">A forecasting workbench that makes seven statistical models feel like one simple
+            decision.</p>
           <p class="project-desc">
             Planners upload demand data, compare models — TBATS, ARIMA, Holt-Winters, and
             more — side by side on accuracy, and tune seasonality and trend without
@@ -641,7 +835,9 @@
         <article class="project reveal" data-project="nest" tabindex="0" role="button" aria-haspopup="dialog">
           <div class="project-media">
             <div class="project-media-placeholder">Add screenshot — save as<br><code>images/nest.png</code></div>
-            <img src="images/Nest%20PMO%20Deal%20Demographics%20Key%20Attributes.png" alt="Nest — a guided workspace for configuring client transitions" loading="lazy" onerror="this.style.display='none'">
+            <img src="images/Nest%20PMO%20Deal%20Demographics%20Key%20Attributes.png"
+              alt="Nest — a guided workspace for configuring client transitions" loading="lazy"
+              onerror="this.style.display='none'">
           </div>
           <p class="project-tag">Operations · Transition Management</p>
           <h3 class="project-title">Nest</h3>
@@ -650,6 +846,25 @@
             From deal demographics to workstream timelines, Nest structures the dozens of
             configuration steps a transition team has to get right — replacing scattered
             trackers with one guided, step-by-step setup.
+          </p>
+          <span class="project-view">View project →</span>
+        </article>
+
+        <article class="project reveal" data-project="landing-pages" tabindex="0" role="button" aria-haspopup="dialog">
+          <div class="project-media">
+            <div class="project-media-placeholder">Add screenshot — save as<br><code>images/landing-pages.png</code>
+            </div>
+            <img src="images/Landing%20pages/Resilient%20work.PNG"
+              alt="Landing Pages — presentation-ready pages built for high-stakes client pitches" loading="lazy"
+              onerror="this.style.display='none'">
+          </div>
+          <p class="project-tag">Presentations · Landing Pages</p>
+          <h3 class="project-title">Landing Pages</h3>
+          <p class="project-line">Presentation-ready landing pages built for high-stakes client pitches.</p>
+          <p class="project-desc">
+            A set of landing pages designed for internal presentations ahead of high-stakes
+            potential client pitches — turning a pitch narrative into a polished, single-page
+            story the team could walk a client through with confidence.
           </p>
           <span class="project-view">View project →</span>
         </article>
@@ -672,6 +887,23 @@
           insight.
         </p>
       </div>
+
+      <div class="role">
+        <div class="role-head">
+          <h3>Tiger Eats</h3>
+          <span class="role-dates">Nov 2025 — May 2026</span>
+        </div>
+        <p class="role-title">Founder &amp; Brand Designer</p>
+        <p class="role-desc">
+          Founded and ran Tiger Eats, a small food outlet in my own city serving
+          Chole Kulche — a popular North Indian street snack — prepared in desi ghee
+          with three eclectic Kulche flavours. Designed the brand identity, logo, and
+          signage from the ground up.
+        </p>
+        <figure class="role-media">
+          <img src="images/Tiger%20Eats.png" alt="Tiger Eats — signage design for the food outlet" loading="lazy">
+        </figure>
+      </div>
     </section>
 
     <section class="contact reveal" id="contact">
@@ -683,7 +915,11 @@
         <a href="https://www.linkedin.com/in/utsavsaini/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://x.com/utsav_saini" target="_blank" rel="noopener">X</a>
         <a href="utsav-saini-resume.pdf" download="Utsav Saini - Resume.pdf">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11m0 0-3.5-3.5M12 14l3.5-3.5"/><path d="M5 17v1.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V17"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 3v11m0 0-3.5-3.5M12 14l3.5-3.5" />
+            <path d="M5 17v1.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V17" />
+          </svg>
           Download Resume
         </a>
       </div>
@@ -696,7 +932,9 @@
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <button class="modal-close" id="modalClose" type="button" aria-label="Close">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M5 5l14 14M19 5L5 19" />
+        </svg>
       </button>
       <div class="modal-head">
         <p class="project-tag" id="modalTag"></p>
@@ -708,115 +946,185 @@
     </div>
   </div>
 
-<script>
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        observer.unobserve(entry.target);
-      }
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
     });
-  }, { threshold: 0.12 });
 
-  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    // Project modal
+    const PROJECTS = {
+      'process-pulse': {
+        tag: 'Finance · Data Visualization',
+        title: 'Process Pulse',
+        line: 'Turning a five-stage procure-to-pay pipeline into a single, readable flow.',
+        desc: 'A Sankey-based dashboard that traces every invoice through sourcing, indexing, matching, exceptions, and posting — surfacing straight-through rates and exception hotspots at a glance, in a process that used to take a spreadsheet and a lot of explaining.',
+        images: ['PTP Process Pulse.png']
+      },
+      'reckoner': {
+        tag: 'Supply Chain · Forecasting',
+        title: 'Reckoner',
+        line: 'A forecasting workbench that makes seven statistical models feel like one simple decision.',
+        desc: "Planners upload demand data, compare models — TBATS, ARIMA, Holt-Winters, and more — side by side on accuracy, and tune seasonality and trend without touching a formula. The hard part was making statistical forecasting legible to people who aren't statisticians.",
+        images: [
+          'Reckoner Data Summary 01.png',
+          'Reckoner Model Tbats.png',
+          'Reckoner Model Ex SES.png',
+          'Reckoner Model Ex LES.png',
+          'Reckoner Model Ex HW.png'
+        ]
+      },
+      'nest': {
+        tag: 'Operations · Transition Management',
+        title: 'Nest',
+        line: 'The workspace that guides teams through standing up a new client transition.',
+        desc: 'From deal demographics to workstream timelines, Nest structures the dozens of configuration steps a transition team has to get right — replacing scattered trackers with one guided, step-by-step setup.',
+        images: [
+          'Nest PMO Deal Demographics Key Attributes.png',
+          'Nest PMO Deal Demographics Additional Attributes.png',
+          'Nest PMO Transition Timeline Tab 1 copy paste feature single row.png',
+          'Nest PMO Transition Timeline Tab 1 copy paste feature blue outline buttons.png',
+          'Nest PMO Transition Timeline Tab 1 copy paste feature blue outline buttons hover keyboard shortcut.png'
+        ]
+      },
+      'landing-pages': {
+        tag: 'Presentations · Landing Pages',
+        title: 'Landing Pages',
+        line: 'Presentation-ready landing pages built for high-stakes client pitches.',
+        desc: "A set of landing pages designed for internal presentations ahead of high-stakes potential client pitches — turning a pitch narrative into a polished, single-page story the team could walk a client through with confidence.",
+        images: [
+          'Resilient work.PNG',
+          'Resilient Work 2.PNG',
+          'Lixil PO LP Grey rising sun 02.png',
+          'Fedex.PNG'
+        ],
+        folder: 'Landing pages'
+      }
+    };
 
-  // Theme toggle
-  const themeToggle = document.getElementById('themeToggle');
-  themeToggle.addEventListener('click', () => {
-    const root = document.documentElement;
-    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-  });
+    const overlay = document.getElementById('modalOverlay');
+    const modal = document.getElementById('modal');
+    const modalTag = document.getElementById('modalTag');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalLine = document.getElementById('modalLine');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalGallery = document.getElementById('modalGallery');
+    const modalClose = document.getElementById('modalClose');
+    let lastFocused = null;
+    let carouselImages = [];
+    let carouselIndex = 0;
 
-  // Project modal
-  const PROJECTS = {
-    'process-pulse': {
-      tag: 'Finance · Data Visualization',
-      title: 'Process Pulse',
-      line: 'Turning a five-stage procure-to-pay pipeline into a single, readable flow.',
-      desc: 'A Sankey-based dashboard that traces every invoice through sourcing, indexing, matching, exceptions, and posting — surfacing straight-through rates and exception hotspots at a glance, in a process that used to take a spreadsheet and a lot of explaining.',
-      images: ['PTP Process Pulse.png']
-    },
-    'reckoner': {
-      tag: 'Supply Chain · Forecasting',
-      title: 'Reckoner',
-      line: 'A forecasting workbench that makes seven statistical models feel like one simple decision.',
-      desc: "Planners upload demand data, compare models — TBATS, ARIMA, Holt-Winters, and more — side by side on accuracy, and tune seasonality and trend without touching a formula. The hard part was making statistical forecasting legible to people who aren't statisticians.",
-      images: [
-        'Reckoner Data Summary 01.png',
-        'Reckoner Model Tbats.png',
-        'Reckoner Model Ex SES.png',
-        'Reckoner Model Ex LES.png',
-        'Reckoner Model Ex HW.png'
-      ]
-    },
-    'nest': {
-      tag: 'Operations · Transition Management',
-      title: 'Nest',
-      line: 'The workspace that guides teams through standing up a new client transition.',
-      desc: 'From deal demographics to workstream timelines, Nest structures the dozens of configuration steps a transition team has to get right — replacing scattered trackers with one guided, step-by-step setup.',
-      images: [
-        'Nest PMO Deal Demographics Key Attributes.png',
-        'Nest PMO Deal Demographics Additional Attributes.png',
-        'Nest PMO Transition Timeline Tab 1 copy paste feature single row.png',
-        'Nest PMO Transition Timeline Tab 1 copy paste feature blue outline buttons.png',
-        'Nest PMO Transition Timeline Tab 1 copy paste feature blue outline buttons hover keyboard shortcut.png'
-      ]
+    function imagePath(file) {
+      const folder = PROJECTS[currentProjectId].folder;
+      const path = folder ? `${folder}/${file}` : file;
+      return `images/${path.split('/').map(encodeURIComponent).join('/')}`;
     }
-  };
 
-  const overlay = document.getElementById('modalOverlay');
-  const modal = document.getElementById('modal');
-  const modalTag = document.getElementById('modalTag');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalLine = document.getElementById('modalLine');
-  const modalDesc = document.getElementById('modalDesc');
-  const modalGallery = document.getElementById('modalGallery');
-  const modalClose = document.getElementById('modalClose');
-  let lastFocused = null;
+    function updateCarouselImage() {
+      const img = document.getElementById('carouselImg');
+      const counter = document.getElementById('carouselCounter');
+      const total = carouselImages.length;
+      img.style.opacity = '0';
+      img.onload = () => { img.style.opacity = '1'; };
+      img.src = imagePath(carouselImages[carouselIndex]);
+      img.alt = `${modalTitle.textContent} screenshot ${carouselIndex + 1} of ${total}`;
+      if (counter) counter.textContent = `${carouselIndex + 1} / ${total}`;
+    }
 
-  function openProject(id) {
-    const data = PROJECTS[id];
-    if (!data) return;
-    modalTag.textContent = data.tag;
-    modalTitle.textContent = data.title;
-    modalLine.textContent = data.line;
-    modalDesc.textContent = data.desc;
-    modalGallery.innerHTML = data.images
-      .map((file) => `<img src="images/${encodeURIComponent(file)}" alt="${data.title} screenshot" loading="lazy">`)
-      .join('');
+    function navigateCarousel(delta) {
+      const total = carouselImages.length;
+      carouselIndex = (carouselIndex + delta + total) % total;
+      updateCarouselImage();
+    }
 
-    lastFocused = document.activeElement;
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    modalClose.focus();
-  }
-
-  function closeProject() {
-    overlay.classList.remove('open');
-    document.body.style.overflow = '';
-    if (lastFocused) lastFocused.focus();
-  }
-
-  document.querySelectorAll('.project[data-project]').forEach((card) => {
-    card.addEventListener('click', () => openProject(card.dataset.project));
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openProject(card.dataset.project);
+    function buildCarousel() {
+      const total = carouselImages.length;
+      const controls = total > 1 ? `
+        <button class="carousel-btn prev" type="button" aria-label="Previous image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="carousel-btn next" type="button" aria-label="Next image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <div class="carousel-counter" id="carouselCounter"></div>
+      ` : '';
+      modalGallery.innerHTML = `
+        <div class="carousel">
+          <div class="carousel-frame"><img id="carouselImg" alt=""></div>
+          ${controls}
+        </div>
+      `;
+      if (total > 1) {
+        modalGallery.querySelector('.prev').addEventListener('click', () => navigateCarousel(-1));
+        modalGallery.querySelector('.next').addEventListener('click', () => navigateCarousel(1));
       }
-    });
-  });
+      updateCarouselImage();
+    }
 
-  modalClose.addEventListener('click', closeProject);
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) closeProject();
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && overlay.classList.contains('open')) closeProject();
-  });
-</script>
+    let currentProjectId = null;
+
+    function openProject(id) {
+      const data = PROJECTS[id];
+      if (!data) return;
+      currentProjectId = id;
+      modalTag.textContent = data.tag;
+      modalTitle.textContent = data.title;
+      modalLine.textContent = data.line;
+      modalDesc.textContent = data.desc;
+
+      carouselImages = data.images;
+      carouselIndex = 0;
+      buildCarousel();
+
+      lastFocused = document.activeElement;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      modalClose.focus();
+    }
+
+    function closeProject() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      if (lastFocused) lastFocused.focus();
+    }
+
+    document.querySelectorAll('.project[data-project]').forEach((card) => {
+      card.addEventListener('click', () => openProject(card.dataset.project));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openProject(card.dataset.project);
+        }
+      });
+    });
+
+    modalClose.addEventListener('click', closeProject);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeProject();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (!overlay.classList.contains('open')) return;
+      if (e.key === 'Escape') closeProject();
+      if (e.key === 'ArrowLeft' && carouselImages.length > 1) navigateCarousel(-1);
+      if (e.key === 'ArrowRight' && carouselImages.length > 1) navigateCarousel(1);
+    });
+  </script>
 
 </body>
+
 </html>
