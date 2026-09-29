@@ -7,1346 +7,214 @@
   <title>Utsav Saini — Product Designer</title>
   <meta name="description"
     content="Utsav Saini is a Product Designer focused on dashboard interfaces for finance, supply-chain, and operations teams. Open to new opportunities.">
-  <script>
-    (function () {
-      var stored = localStorage.getItem('theme');
-      var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
-    })();
-  </script>
+  <meta name="theme-color" content="#0b0b0c">
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #fafaf7;
-      --surface: #f0efe9;
-      --border: #e4e2da;
-      --text: #16161a;
-      --text-dim: #6c6c74;
-      --accent: #2b52ff;
-      --nav-bg: rgba(250, 250, 247, 0.85);
-      --media-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.05), inset 0 3px 14px rgba(17, 17, 17, 0.05);
-      --width: 640px;
-      --gutter: 24px;
-      --cell-hover: rgba(249, 251, 255, 0.979);
-    }
-
-    [data-theme="dark"] {
-      --bg: #121214;
-      --surface: #1c1c20;
-      --border: #2b2b30;
-      --text: #f3f2ee;
-      --text-dim: #9b9aa1;
-      --accent: #6f8bff;
-      --nav-bg: rgba(18, 18, 20, 0.85);
-      --media-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), inset 0 3px 16px rgba(0, 0, 0, 0.4);
-      --cell-hover: rgba(0, 0, 0, 0.364);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
-
-    body {
-      margin: 0;
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      -webkit-font-smoothing: antialiased;
-      line-height: 1.5;
-      overflow-x: hidden;
-      transition: background-color 0.4s ease, color 0.4s ease;
-    }
-
-    a {
-      color: inherit;
-    }
-
-    /* Grid frame — vertical rails bound the content column; each major
-     block is a bordered cell that tints on hover. */
-    .wrap {
-      max-width: var(--width);
-      margin: 0 auto;
-      padding: 0 var(--gutter);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-    }
-
-    /* Nav */
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: var(--nav-bg);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
-      transition: background-color 0.4s ease;
-    }
-
-    .nav-inner {
-      max-width: var(--width);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      margin: 0 auto;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      transition: background-color 0.15s ease;
-    }
-
-    .nav-inner:hover {
-      background-color: var(--cell-hover);
-    }
-
-    .nav-name {
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing: -0.01em;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 24px;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-dim);
-      transition: color 0.2s ease;
-    }
-
-    .nav-links a:hover {
-      color: var(--text);
-    }
-
-    .theme-toggle {
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      background: transparent;
-      color: var(--text);
-      cursor: pointer;
-      padding: 0;
-      transition: background-color 0.25s ease, border-color 0.4s ease, transform 0.25s ease;
-    }
-
-    .theme-toggle:hover {
-      background: var(--surface);
-      transform: translateY(-1px);
-    }
-
-    .theme-toggle svg {
-      width: 15px;
-      height: 15px;
-    }
-
-    .theme-toggle .icon-sun {
-      display: none;
-    }
-
-    [data-theme="dark"] .theme-toggle .icon-moon {
-      display: none;
-    }
-
-    [data-theme="dark"] .theme-toggle .icon-sun {
-      display: block;
-    }
-
-    /* Reveal animation */
-    .reveal {
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .reveal.in-view {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Hero */
-    .hero {
-      padding: 88px 0 56px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin: 0 0 24px;
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #2bb673;
-      position: relative;
-    }
-
-    .status-dot::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background: #2bb673;
-      animation: pulse 2s ease-out infinite;
-    }
-
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-        opacity: 0.6;
-      }
-
-      100% {
-        transform: scale(2.8);
-        opacity: 0;
-      }
-    }
-
-    .hero-name {
-      font-size: clamp(44px, 10vw, 72px);
-      line-height: 1.02;
-      letter-spacing: -0.03em;
-      font-weight: 800;
-      margin: 0 0 16px;
-    }
-
-    h2.hero-tagline {
-      font-size: clamp(28px, 5vw, 38px);
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      font-weight: 700;
-      margin: 0 0 24px;
-    }
-
-    .hero-and {
-      color: var(--text-dim);
-      font-weight: 500;
-    }
-
-    .hero-bio {
-      font-size: 17px;
-      color: var(--text-dim);
-      max-width: 52ch;
-      margin: 0;
-    }
-
-    /* Section label */
-    .section-label {
-      position: relative;
-      z-index: 1;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin: 0 0 32px;
-    }
-
-    section {
-      padding: 56px 0;
-    }
-
-    section+section {
-      border-top: 1px solid var(--border);
-    }
-
-    /* Tools */
-    section.tools {
-      padding-top: 16px;
-      padding-bottom: 16px;
-      padding-left: var(--gutter);
-      padding-right: var(--gutter);
-      margin: 0 calc(-1 * var(--gutter));
-      border-top: 1px solid var(--border);
-    }
-
-    section.work {
-      padding-top: 56px;
-      padding-bottom: 0;
-      border-top: 1px solid var(--border);
-    }
-
-    section.work .section-label {
-      margin-bottom: 40px;
-    }
-
-    .tools-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px 3px;
-    }
-
-    .tool-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      width: 46px;
-      text-align: center;
-    }
-
-    .tool-icon {
-      width: 42px;
-      height: 42px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, border-color 0.4s ease;
-    }
-
-    .tool-icon svg {
-      width: 17px;
-      height: 17px;
-    }
-
-    .tool-item:hover .tool-icon {
-      transform: translateY(-4px);
-      background: var(--cell-hover);
-    }
-
-    .tool-name {
-      font-size: 10.5px;
-      font-weight: 600;
-      color: var(--text-dim);
-      line-height: 1.3;
-    }
-
-    /* Work */
-    .project-list {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .project-media {
-      position: relative;
-      min-height: 200px;
-      border-radius: 16px;
-      background: var(--surface);
-      box-shadow: var(--media-shadow);
-      padding: clamp(16px, 5vw, 40px);
-      margin-bottom: 24px;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .project:hover .project-media {
-      transform: translateY(-4px);
-    }
-
-    .project-media-placeholder {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 24px;
-      font-size: 12px;
-      color: var(--text-dim);
-      font-weight: 500;
-    }
-
-    .project-media img {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 8px;
-    }
-
-    .project-tag {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin: 0 0 8px;
-    }
-
-    .project-title {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      margin: 0 0 8px;
-    }
-
-    .project-line {
-      font-size: 15px;
-      font-weight: 600;
-      margin: 0 0 8px;
-    }
-
-    .project-desc {
-      font-size: 15px;
-      color: var(--text-dim);
-      margin: 0;
-      max-width: 56ch;
-    }
-
-    .project {
-      cursor: pointer;
-      outline: none;
-      margin-left: calc(var(--gutter) * -1);
-      margin-right: calc(var(--gutter) * -1);
-      padding: 40px var(--gutter);
-      transition: background-color 0.15s ease;
-    }
-
-    .project+.project {
-      border-top: 1px solid var(--border);
-    }
-
-    .project[data-project="process-pulse"] {
-      padding-top: 114px;
-      margin-top: -114px;
-    }
-
-    .project:hover {
-      background-color: var(--cell-hover);
-    }
-
-    .project:focus-visible {
-      box-shadow: 0 0 0 3px var(--accent);
-    }
-
-    .project-view {
-      display: inline-flex;
-      margin-top: 16px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--accent);
-      transition: transform 0.25s ease;
-    }
-
-    .project:hover .project-view {
-      transform: translateX(4px);
-    }
-
-    /* Project modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 48px 24px;
-      overflow-y: auto;
-      background: rgba(10, 10, 12, 0.55);
-      backdrop-filter: blur(4px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .modal-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .modal {
-      width: 100%;
-      max-width: min(1400px, 80vw);
-      background: var(--bg);
-      border-radius: 20px;
-      padding: 40px 40px 48px;
-      position: relative;
-      transform: translateY(18px) scale(0.98);
-      opacity: 0;
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, background-color 0.4s ease;
-    }
-
-    .modal-overlay.open .modal {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 34px;
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      background: var(--bg);
-      color: var(--text);
-      cursor: pointer;
-      transition: background-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .modal-close:hover {
-      background: var(--surface);
-      transform: rotate(90deg);
-    }
-
-    .modal-close svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    .modal-head {
-      max-width: 56ch;
-      margin-bottom: 32px;
-    }
-
-    .modal-title {
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      margin: 0 0 8px;
-    }
-
-    .carousel {
-      position: relative;
-      background: var(--surface);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-    }
-
-    .carousel-frame {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 320px;
-    }
-
-    .carousel-frame img {
-      max-width: 100%;
-      max-height: 70vh;
-      display: block;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-    }
-
-    .carousel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      cursor: pointer;
-      transition: background-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .carousel-btn:hover {
-      background: var(--surface);
-    }
-
-    .carousel-btn.prev {
-      left: 16px;
-    }
-
-    .carousel-btn.next {
-      right: 16px;
-    }
-
-    .carousel-btn svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    .carousel-counter {
-      position: absolute;
-      bottom: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 12px;
-      font-weight: 600;
-      color: #fff;
-      background: rgba(0, 0, 0, 0.55);
-      padding: 5px 12px;
-      border-radius: 999px;
-      backdrop-filter: blur(4px);
-    }
-
-    @media (max-width: 560px) {
-      .modal-overlay {
-        padding: 0;
-      }
-
-      .modal {
-        max-width: none;
-        min-height: 100%;
-        border-radius: 0;
-        padding: 32px 24px 40px;
-      }
-
-      .carousel-btn {
-        width: 38px;
-        height: 38px;
-      }
-
-      .carousel-btn.prev {
-        left: 8px;
-      }
-
-      .carousel-btn.next {
-        right: 8px;
-      }
-    }
-
-    /* About / Experience */
-    .role-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 8px;
-    }
-
-    .role-head h3 {
-      font-size: 18px;
-      font-weight: 700;
-      margin: 0;
-    }
-
-    .role-dates {
-      font-size: 13px;
-      color: var(--text-dim);
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
-    .role-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--accent);
-      margin: 0 0 16px;
-    }
-
-    .role-desc {
-      font-size: 15px;
-      color: var(--text-dim);
-      margin: 0;
-      max-width: 56ch;
-    }
-
-    .role+.role {
-      margin-top: 40px;
-      padding-top: 40px;
-      border-top: 1px solid var(--border);
-    }
-
-    .role-media {
-      margin: 20px 0 0;
-      max-width: 320px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-    }
-
-    .role-media img {
-      width: 100%;
-      display: block;
-    }
-
-    /* Contact */
-    .contact h2 {
-      font-size: clamp(26px, 5vw, 34px);
-      letter-spacing: -0.02em;
-      margin: 0 0 16px;
-    }
-
-    .contact-line {
-      font-size: 15px;
-      color: var(--text-dim);
-      margin: 0 0 32px;
-    }
-
-    .contact-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .contact-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 16px 24px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
-    }
-
-    .contact-links a:hover {
-      background: var(--text);
-      color: var(--bg);
-      border-color: var(--text);
-      transform: translateY(-2px);
-    }
-
-    .contact-links a svg {
-      width: 14px;
-      height: 14px;
-      flex-shrink: 0;
-    }
-
-    footer {
-      padding: 32px 0 56px;
-      font-size: 13px;
-      color: var(--text-dim);
-      border-top: 1px solid var(--border);
-    }
-
-    /* Grid cells — each major block bleeds edge-to-edge to the rails on
-     .wrap and tints on hover. Declared last so it wins over the
-     section/footer padding shorthands above. */
-    .hero,
-    .tools,
-    .work,
-    .about,
-    .contact,
-    footer {
-      margin-left: calc(var(--gutter) * -1);
-      margin-right: calc(var(--gutter) * -1);
-      padding-left: var(--gutter);
-      padding-right: var(--gutter);
-      transition: background-color 0.15s ease;
-    }
-
-    .hero:hover,
-    .tools:hover,
-    .about:hover,
-    .contact:hover,
-    footer:hover {
-      background-color: var(--cell-hover);
-    }
-
-    @media (max-width: 480px) {
-      .hero {
-        padding-top: 56px;
-        padding-bottom: 48px;
-      }
-
-      section {
-        padding: 48px 0;
-      }
-
-      .nav-inner {
-        padding: 16px 24px;
-      }
-
-      .wrap,
-      .nav-inner {
-        padding-left: 24px;
-        padding-right: 24px;
-      }
-
-      .nav-right {
-        gap: 16px;
-      }
-
-      .nav-links {
-        gap: 12px;
-      }
-
-      .nav-links a {
-        font-size: 12px;
-      }
-    }
-
-    /* Rail corner markers — small squares where a horizontal divider
-     crosses one of the vertical rail lines. */
-    .nav-inner,
-    .tools,
-    .work,
-    .project,
-    .about,
-    .contact,
-    footer {
-      position: relative;
-    }
-
-    .nav-inner::before,
-    .nav-inner::after,
-    .tools::before,
-    .tools::after,
-    .work::before,
-    .work::after,
-    .project+.project::before,
-    .project+.project::after,
-    .about::before,
-    .about::after,
-    .contact::before,
-    .contact::after,
-    footer::before,
-    footer::after {
-      content: "";
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      z-index: 2;
-      transition: background-color 0.4s ease, border-color 0.4s ease;
-    }
-
-    .nav-inner::before,
-    .tools::before,
-    .work::before,
-    .project+.project::before,
-    .about::before,
-    .contact::before,
-    footer::before {
-      left: -6px;
-    }
-
-    .nav-inner::after,
-    .tools::after,
-    .work::after,
-    .project+.project::after,
-    .about::after,
-    .contact::after,
-    footer::after {
-      right: -6px;
-    }
-
-    .nav-inner::before,
-    .nav-inner::after {
-      bottom: -6px;
-    }
-
-    .tools::before,
-    .tools::after,
-    .work::before,
-    .work::after,
-    .project+.project::before,
-    .project+.project::after,
-    .about::before,
-    .about::after,
-    .contact::before,
-    .contact::after,
-    footer::before,
-    footer::after {
-      top: -6px;
-    }
-
-  </style>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Mono:wght@400&family=Instrument+Sans:wght@400..700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+  <div class="shell" id="top">
 
-  <header class="nav" id="nav">
-    <div class="nav-inner">
-      <a href="#top" class="nav-name">Utsav Saini</a>
-      <div class="nav-right">
-        <nav class="nav-links">
-          <a href="#work">Work</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-          <a href="utsav-saini-resume.pdf" target="_blank" rel="noopener">Resume</a>
+    <aside class="rail">
+      <div class="rail-stack">
+        <div class="rail-top">
+          <a class="mark" href="#top" aria-label="utsav.design — back to top">
+            <span class="mark-glyph"></span>utsav.design
+          </a>
+          <h1 class="name">Utsav<br>Saini</h1>
+          <p class="role">Product Designer — Enterprise<br>Data Interfaces</p>
+          <p class="availability"><i></i>Open to new opportunities</p>
+        </div>
+
+        <nav class="index" aria-label="Sections">
+          <a href="#work" data-section="work"><span class="n">01</span><span class="l">Work</span><span class="c">04</span></a>
+          <a href="#experience" data-section="experience"><span class="n">02</span><span class="l">Experience</span><span class="c">02</span></a>
+          <a href="#about" data-section="about"><span class="n">03</span><span class="l">About</span><span class="c">—</span></a>
+          <a href="#contact" data-section="contact"><span class="n">04</span><span class="l">Contact</span><span class="c">—</span></a>
         </nav>
-        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 12.5A8.5 8.5 0 1 1 11.5 4a6.5 6.5 0 0 0 8.5 8.5Z" />
-          </svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4.5" />
-            <path
-              d="M12 2.5v2.5M12 19v2.5M4.5 12H2M22 12h-2.5M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8" />
-          </svg>
-        </button>
+
+        <div class="rail-bottom toolkit">
+          <span class="mono">Toolkit</span>
+          <p class="tools">Figma · Illustrator · Framer · Rive<br>Unicorn Studio · Claude · Paper AI</p>
+          <div class="links">
+            <a href="mailto:utsavsaini747@gmail.com">Email</a>
+            <a href="https://www.linkedin.com/in/utsavsaini/" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://x.com/utsav_saini" target="_blank" rel="noopener">X</a>
+            <a href="utsav-saini-resume.pdf" target="_blank" rel="noopener">Resume</a>
+          </div>
+        </div>
       </div>
-    </div>
-  </header>
 
-  <main class="wrap" id="top">
-
-    <section class="hero">
-      <p class="eyebrow"><span class="status-dot"></span> Product Designer — Open to new opportunities</p>
-      <h1 class="hero-name">Utsav Saini</h1>
-      <h2 class="hero-tagline">Obsessed with craft <span class="hero-and">and</span> function.</h2>
-      <p class="hero-bio">
-        I design dashboard interfaces for finance, supply-chain, and operations teams —
-        turning complex, multi-step processes into visualizations people can actually
-        read at a glance.
-      </p>
-    </section>
-
-    <section class="tools reveal" id="tools">
-      <div class="tools-grid">
-
-        <div class="tool-item">
-          <span class="tool-icon">
-            <svg viewBox="0 0 400 600" fill="none" aria-hidden="true">
-              <path d="M0 500C0 444.772 44.772 400 100 400H200V500C200 555.228 155.228 600 100 600C44.772 600 0 555.228 0 500Z" fill="#24CB71" />
-              <path d="M200 0V200H300C355.228 200 400 155.228 400 100C400 44.772 355.228 0 300 0H200Z" fill="#FF7237" />
-              <path d="M299.167 400C354.395 400 399.167 355.228 399.167 300C399.167 244.772 354.395 200 299.167 200C243.939 200 199.167 244.772 199.167 300C199.167 355.228 243.939 400 299.167 400Z" fill="#00B6FF" />
-              <path d="M0 100C0 155.228 44.772 200 100 200H200V0H100C44.772 0 0 44.772 0 100Z" fill="#FF3737" />
-              <path d="M0 300C0 355.228 44.772 400 100 400H200V200H100C44.772 200 0 244.772 0 300Z" fill="#874FFF" />
-            </svg>
-          </span>
-          <span class="tool-name">Figma</span>
-        </div>
-
-        <div class="tool-item">
-          <span class="tool-icon">
-            <svg viewBox="0 0 511.45 498.66" aria-hidden="true">
-              <rect width="511.45" height="498.66" rx="90.57" fill="#300" />
-              <path d="M247.84,299.26H168.58l-16.12,50.09a4,4,0,0,1-4.12,3.09H108.2q-3.44,0-2.4-3.78L174.42,151q1-3.09,2.06-7a74.51,74.51,0,0,0,1.37-13.9,2.11,2.11,0,0,1,1.8-2.4,2,2,0,0,1,.6,0H234.8c1.6,0,2.51.57,2.75,1.71L315.43,349c.69,2.28,0,3.43-2.06,3.43h-44.6a3.17,3.17,0,0,1-3.43-2.4ZM180.94,256h54.2q-2.05-6.87-4.8-15.44t-5.83-18.36l-6.18-19.55q-3.09-9.78-5.66-18.88T208,167.17h-.34a276.76,276.76,0,0,1-7.21,27.44q-4.8,15.45-9.78,31.57T180.94,256Z"
-                fill="#ff9a00" />
-              <path d="M361.74,164.08a24.9,24.9,0,0,1-18.87-7.55,27.12,27.12,0,0,1-7.2-19.56,25.17,25.17,0,0,1,7.72-19,26.52,26.52,0,0,1,19-7.38q12.35,0,19.38,7.38a26.52,26.52,0,0,1,7,19,26.78,26.78,0,0,1-7.38,19.56A26.32,26.32,0,0,1,361.74,164.08ZM338.07,349V185c0-2.06.91-3.09,2.74-3.09H383c1.82,0,2.74,1,2.74,3.09V349c0,2.28-.91,3.43-2.74,3.43H341.16C339.1,352.44,338.07,351.29,338.07,349Z"
-                fill="#ff9a00" />
-            </svg>
-          </span>
-          <span class="tool-name">Adobe Illustrator</span>
-        </div>
-
-        <div class="tool-item">
-          <span class="tool-icon">
-            <svg viewBox="0 0 512 509.64" aria-hidden="true">
-              <path fill="#D77655"
-                d="M115.612 0h280.775C459.974 0 512 52.026 512 115.612v278.415c0 63.587-52.026 115.612-115.613 115.612H115.612C52.026 509.639 0 457.614 0 394.027V115.612C0 52.026 52.026 0 115.612 0z" />
-              <path fill="#FCF2EE" fill-rule="nonzero"
-                d="M142.27 316.619l73.655-41.326 1.238-3.589-1.238-1.996-3.589-.001-12.31-.759-42.084-1.138-36.498-1.516-35.361-1.896-8.897-1.895-8.34-10.995.859-5.484 7.482-5.03 10.717.935 23.683 1.617 35.537 2.452 25.782 1.517 38.193 3.968h6.064l.86-2.451-2.073-1.517-1.618-1.517-36.776-24.922-39.81-26.338-20.852-15.166-11.273-7.683-5.687-7.204-2.451-15.721 10.237-11.273 13.75.935 3.513.936 13.928 10.716 29.749 23.027 38.848 28.612 5.687 4.727 2.275-1.617.278-1.138-2.553-4.271-21.13-38.193-22.546-38.848-10.035-16.101-2.654-9.655c-.935-3.968-1.617-7.304-1.617-11.374l11.652-15.823 6.445-2.073 15.545 2.073 6.547 5.687 9.655 22.092 15.646 34.78 24.265 47.291 7.103 14.028 3.791 12.992 1.416 3.968 2.449-.001v-2.275l1.997-26.641 3.69-32.707 3.589-42.084 1.239-11.854 5.863-14.206 11.652-7.683 9.099 4.348 7.482 10.716-1.036 6.926-4.449 28.915-8.72 45.294-5.687 30.331h3.313l3.792-3.791 15.342-20.372 25.782-32.227 11.374-12.789 13.27-14.129 8.517-6.724 16.1-.001 11.854 17.617-5.307 18.199-16.581 21.029-13.75 17.819-19.716 26.54-12.309 21.231 1.138 1.694 2.932-.278 44.536-9.479 24.062-4.347 28.714-4.928 12.992 6.066 1.416 6.167-5.106 12.613-30.71 7.583-36.018 7.204-53.636 12.689-.657.48.758.935 24.164 2.275 10.337.556h25.301l47.114 3.514 12.309 8.139 7.381 9.959-1.238 7.583-18.957 9.655-25.579-6.066-59.702-14.205-20.474-5.106-2.83-.001v1.694l17.061 16.682 31.266 28.233 39.152 36.397 1.997 8.999-5.03 7.102-5.307-.758-34.401-25.883-13.27-11.651-30.053-25.302-1.996-.001v2.654l6.926 10.136 36.574 54.975 1.895 16.859-2.653 5.485-9.479 3.311-10.414-1.895-21.408-30.054-22.092-33.844-17.819-30.331-2.173 1.238-10.515 113.261-4.929 5.788-11.374 4.348-9.478-7.204-5.03-11.652 5.03-23.027 6.066-30.052 4.928-23.886 4.449-29.674 2.654-9.858-.177-.657-2.173.278-22.37 30.71-34.021 45.977-26.919 28.815-6.445 2.553-11.173-5.789 1.037-10.337 6.243-9.2 37.257-47.392 22.47-29.371 14.508-16.961-.101-2.451h-.859l-98.954 64.251-17.618 2.275-7.583-7.103.936-11.652 3.589-3.791 29.749-20.474-.101.102.024.101z" />
-            </svg>
-          </span>
-          <span class="tool-name">Claude</span>
-        </div>
-
-        <div class="tool-item">
-          <span class="tool-icon">
-            <svg viewBox="0 0 39 39" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M6 0H39V24H24V6H6ZM0 6H6V24H24V39H0Z" fill="#81ACEC" />
-            </svg>
-          </span>
-          <span class="tool-name">Paper AI</span>
-        </div>
-
-        <div class="tool-item">
-          <span class="tool-icon">
-            <svg viewBox="0 0 171 171" fill="currentColor" aria-hidden="true">
-              <path d="M23.84,0h53.53c22.9,0,25.73,18.32,24.07,26.6-7.31,36.48-22.2,110.67-23.28,115.64-.7,3.22.82,3.68,1.95.46,14.11-39.99,42.82-121.35,44.79-126.87,3.07-8.51,14.68-18.59,30.25-14.82,12.45,3.02,15.85,16.29,15.85,22.46v126.27c0,8.88-9.79,25.71-30.39,20.16-20.59-5.56-18.86-25.05-15.43-34.1,11.83-27.36,35.99-83.27,37.96-87.99,1.06-2.53-.18-3.13-1.72-.87-20.6,30.1-63.93,93.4-72.44,105.84-8.51,12.44-18.82,15.69-25.28,15.69C14.75,168.47,0,120.43,0,96.45V24.62C0,5.14,15.89.09,23.84,0Z" />
-            </svg>
-          </span>
-          <span class="tool-name">Unicorn Studio</span>
-        </div>
-
-        <div class="tool-item">
-          <span class="tool-icon">
-            <svg viewBox="0 0 53 56" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" clip-rule="evenodd"
-                d="M0 3.442c0 1.9 1.558 3.441 3.479 3.441H32.31c3.286 0 5.992 1.004 8.118 3.012 2.126 2.008 3.189 4.589 3.189 7.744 0 2.916-1.063 5.306-3.19 7.17-2.125 1.817-4.831 2.725-8.117 2.725H19.78c-1.922 0-3.48 1.54-3.48 3.442 0 1.9 1.558 3.441 3.48 3.441h13.836l12.466 19.79c.773 1.196 1.86 1.793 3.261 1.793 1.547 0 2.634-.597 3.262-1.793.628-1.242.507-2.557-.362-3.943l-11.09-17.64c2.996-1.338 5.364-3.298 7.103-5.879 1.74-2.629 2.61-5.664 2.61-9.106 0-3.49-.798-6.549-2.392-9.178-1.546-2.63-3.72-4.685-6.523-6.167C39.148.764 35.935 0 32.31 0H3.48C1.558 0 0 1.54 0 3.442z" />
-            </svg>
-          </span>
-          <span class="tool-name">Rive</span>
-        </div>
-
-        <div class="tool-item">
-          <span class="tool-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M4 0h16v8h-8zM4 8h8l8 8H4zM4 16h8v8z" />
-            </svg>
-          </span>
-          <span class="tool-name">Framer</span>
-        </div>
-
-        <div class="tool-item">
-          <span class="tool-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-              stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 20h9" />
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5Z" />
-            </svg>
-          </span>
-          <span class="tool-name">Pencil &amp; Paper</span>
-        </div>
-
+      <div class="rail-foot">
+        <span>© 2026 Utsav Saini</span>
+        <span>Designed and built in Figma &amp; Framer</span>
       </div>
-    </section>
+    </aside>
 
-    <section class="work reveal" id="work">
-      <p class="section-label">Selected Work</p>
+    <main class="content">
 
-      <div class="project-list">
-
-        <article class="project reveal" data-project="process-pulse" tabindex="0" role="button" aria-haspopup="dialog">
-          <div class="project-media">
-            <div class="project-media-placeholder">Add screenshot — save as<br><code>images/process-pulse.png</code>
-            </div>
-            <img src="images/PTP%20Process%20Pulse.png"
-              alt="Process Pulse — a Sankey-style dashboard tracing a procure-to-pay process" loading="lazy"
-              onerror="this.style.display='none'">
-          </div>
-          <p class="project-tag">Finance · Data Visualization</p>
-          <h3 class="project-title">Process Pulse</h3>
-          <p class="project-line">Turning a five-stage procure-to-pay pipeline into a single, readable flow.</p>
-          <p class="project-desc">
-            A Sankey-based dashboard that traces every invoice through sourcing, indexing,
-            matching, exceptions, and posting — surfacing straight-through rates and
-            exception hotspots at a glance, in a process that used to take a spreadsheet
-            and a lot of explaining.
-          </p>
-          <span class="project-view">View project →</span>
-        </article>
-
-        <article class="project reveal" data-project="reckoner" tabindex="0" role="button" aria-haspopup="dialog">
-          <div class="project-media">
-            <div class="project-media-placeholder">Add screenshot — save as<br><code>images/reckoner.png</code></div>
-            <img src="images/Reckoner%20Data%20Summary%2001.png"
-              alt="Reckoner — a forecasting workbench comparing statistical models" loading="lazy"
-              onerror="this.style.display='none'">
-          </div>
-          <p class="project-tag">Supply Chain · Forecasting</p>
-          <h3 class="project-title">Reckoner</h3>
-          <p class="project-line">A forecasting workbench that makes seven statistical models feel like one simple
-            decision.</p>
-          <p class="project-desc">
-            Planners upload demand data, compare models — TBATS, ARIMA, Holt-Winters, and
-            more — side by side on accuracy, and tune seasonality and trend without
-            touching a formula. The hard part was making statistical forecasting legible
-            to people who aren't statisticians.
-          </p>
-          <span class="project-view">View project →</span>
-        </article>
-
-        <article class="project reveal" data-project="nest" tabindex="0" role="button" aria-haspopup="dialog">
-          <div class="project-media">
-            <div class="project-media-placeholder">Add screenshot — save as<br><code>images/nest.png</code></div>
-            <img src="images/Nest%20PMO%20Deal%20Demographics%20Key%20Attributes.png"
-              alt="Nest — a guided workspace for configuring client transitions" loading="lazy"
-              onerror="this.style.display='none'">
-          </div>
-          <p class="project-tag">Operations · Transition Management</p>
-          <h3 class="project-title">Nest</h3>
-          <p class="project-line">The workspace that guides teams through standing up a new client transition.</p>
-          <p class="project-desc">
-            From deal demographics to workstream timelines, Nest structures the dozens of
-            configuration steps a transition team has to get right — replacing scattered
-            trackers with one guided, step-by-step setup.
-          </p>
-          <span class="project-view">View project →</span>
-        </article>
-
-        <article class="project reveal" data-project="landing-pages" tabindex="0" role="button" aria-haspopup="dialog">
-          <div class="project-media">
-            <div class="project-media-placeholder">Add screenshot — save as<br><code>images/landing-pages.png</code>
-            </div>
-            <img src="images/Landing%20pages/Resilient%20work.PNG"
-              alt="Landing Pages — presentation-ready pages built for high-stakes client pitches" loading="lazy"
-              onerror="this.style.display='none'">
-          </div>
-          <p class="project-tag">Presentations · Landing Pages</p>
-          <h3 class="project-title">Landing Pages</h3>
-          <p class="project-line">Presentation-ready landing pages built for high-stakes client pitches.</p>
-          <p class="project-desc">
-            A set of landing pages designed for internal presentations ahead of high-stakes
-            potential client pitches — turning a pitch narrative into a polished, single-page
-            story the team could walk a client through with confidence.
-          </p>
-          <span class="project-view">View project →</span>
-        </article>
-
-      </div>
-    </section>
-
-    <section class="about reveal" id="about">
-      <p class="section-label">Experience</p>
-      <div class="role">
-        <div class="role-head">
-          <h3>Accenture</h3>
-          <span class="role-dates">2018 — 2023</span>
-        </div>
-        <p class="role-title">Product Designer</p>
-        <p class="role-desc">
-          Five years designing dashboard interfaces for enterprise functions — Finance
-          &amp; Accounting, Supply Chain, and beyond. My focus was imagining clear
-          visualizations for complex, multi-step processes and simplifying them for fast
-          insight.
+      <section class="hero" id="about">
+        <div class="meta mono"><span>Selected work — 2018 / 2026</span><span>Gurugram, IN</span></div>
+        <h2 class="statement">
+          <span class="line">Complex processes,</span>
+          <span class="line rule-line"><span>made</span><span class="rule"></span></span>
+          <span class="line accent">readable at a glance.</span>
+        </h2>
+        <p class="intro">
+          Five years designing dashboard interfaces for finance, supply-chain and operations teams at Accenture —
+          turning multi-step enterprise processes into visualizations people can actually read without a walkthrough.
         </p>
-      </div>
-
-      <div class="role">
-        <div class="role-head">
-          <h3>Tiger Eats</h3>
-          <span class="role-dates">Nov 2025 — May 2026</span>
+        <div class="stats">
+          <div class="stat"><b>05</b><span>Years in enterprise UX</span></div>
+          <div class="stat"><b>03</b><span>Domains — finance, supply chain, ops</span></div>
+          <div class="stat"><b>04</b><span>Shipped products</span></div>
+          <div class="stat"><b>07</b><span>Forecast models made legible</span></div>
         </div>
-        <p class="role-title">Founder &amp; Brand Designer</p>
-        <p class="role-desc">
-          Founded and ran Tiger Eats, a small food outlet in my own city serving
-          Chole Kulche — a popular North Indian street snack — prepared in desi ghee
-          with three eclectic Kulche flavours. Designed the brand identity, logo, and
-          signage from the ground up.
-        </p>
-        <figure class="role-media">
-          <img src="images/Tiger%20Eats.png" alt="Tiger Eats — signage design for the food outlet" loading="lazy">
-        </figure>
+      </section>
+
+      <section class="work" id="work">
+        <div class="section-head mono"><span class="num">01</span><span class="title">Selected work</span><span>Featured</span></div>
+
+        <a class="shot" href="process-pulse.html"
+          style="background-image:url('images/PTP%20Process%20Pulse.png')"
+          aria-label="Open Process Pulse case study"></a>
+
+        <div class="featured">
+          <div class="narrative">
+            <p class="eyebrow">Finance · Data Visualization</p>
+            <h3>Process Pulse</h3>
+            <p class="deck">
+              A Sankey-based dashboard that traces every invoice through sourcing, indexing, matching, exceptions and
+              posting — surfacing straight-through rates and exception hotspots at a glance, in a process that used to
+              take a spreadsheet and a lot of explaining.
+            </p>
+            <a class="cta" href="process-pulse.html">View project <span class="arrow">↗</span></a>
+          </div>
+          <dl class="spec">
+            <div><dt>ROLE</dt><dd>Product Designer</dd></div>
+            <div><dt>YEAR</dt><dd>2022</dd></div>
+            <div><dt>SCOPE</dt><dd>Procure-to-pay, 5 stages</dd></div>
+            <div><dt>OUTPUT</dt><dd>Web dashboard</dd></div>
+            <div><dt>TEAM</dt><dd>Accenture</dd></div>
+          </dl>
+        </div>
+
+        <div class="index-head mono"><span>More projects</span><span>03</span></div>
+        <div class="project-list">
+          <a class="project" href="reckoner.html">
+            <span class="pnum">02</span>
+            <div class="thumb" style="background-image:url('images/Reckoner%20Data%20Summary%2001.png');background-size:contain"></div>
+            <div class="pbody">
+              <p class="eyebrow">Supply Chain · Forecasting</p>
+              <h3>Reckoner</h3>
+              <p>Seven statistical models — TBATS, ARIMA, Holt-Winters — compared side by side on accuracy, so planners can tune seasonality without touching a formula.</p>
+            </div>
+            <div class="pmeta"><span>2021</span><span class="arrow">↗</span></div>
+          </a>
+          <a class="project" href="nest.html">
+            <span class="pnum">03</span>
+            <div class="thumb" style="background-image:url('images/Nest%20PMO%20Deal%20Demographics%20Key%20Attributes.png');background-size:contain"></div>
+            <div class="pbody">
+              <p class="eyebrow">Operations · Transition Mgmt</p>
+              <h3>Nest</h3>
+              <p>One guided setup that structures the dozens of configuration steps a client transition team has to get right, replacing scattered trackers.</p>
+            </div>
+            <div class="pmeta"><span>2023</span><span class="arrow">↗</span></div>
+          </a>
+          <a class="project" href="landing-pages.html">
+            <span class="pnum">04</span>
+            <div class="thumb" style="background-image:url('images/Landing%20pages/Resilient%20work.PNG')"></div>
+            <div class="pbody">
+              <p class="eyebrow">Presentations · Marketing</p>
+              <h3>Landing Pages</h3>
+              <p>Pitch narratives turned into polished single-page stories the team could walk a client through with confidence.</p>
+            </div>
+            <div class="pmeta"><span>2024</span><span class="arrow">↗</span></div>
+          </a>
+        </div>
+      </section>
+
+      <section class="experience" id="experience">
+        <div class="section-head mono"><span class="num">02</span><span class="title">Experience</span><span>2018 — 2026</span></div>
+
+        <div class="job">
+          <div>
+            <h3>Accenture</h3>
+            <p class="jrole">Product Designer</p>
+            <span class="jdates mono">2018 — 2023</span>
+          </div>
+          <div>
+            <p class="jdesc">Five years designing dashboard interfaces for enterprise functions — Finance &amp; Accounting, Supply Chain and beyond. My focus was imagining clear visualizations for complex, multi-step processes and simplifying them for fast insight.</p>
+            <ul class="chips"><li>Dashboards</li><li>Data viz</li><li>Design systems</li><li>Enterprise UX</li></ul>
+          </div>
+        </div>
+
+        <div class="job">
+          <div>
+            <h3>Tiger Eats</h3>
+            <p class="jrole">Founder &amp; Brand Designer</p>
+            <span class="jdates mono">Nov 2025 — May 2026</span>
+          </div>
+          <div>
+            <p class="jdesc">Founded and ran a small food outlet in my own city serving Chole Kulche — a North Indian street snack prepared in desi ghee with three eclectic Kulche flavours. Designed the brand identity, logo and signage from the ground up.</p>
+            <ul class="chips"><li>Brand identity</li><li>Logo</li><li>Signage</li><li>Packaging</li></ul>
+            <figure class="jmedia"><img src="images/Tiger%20Eats.png" alt="Tiger Eats — signage design for the food outlet" loading="lazy"></figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact" id="contact">
+        <div class="section-head mono"><span class="num">03</span><span class="title">Get in touch</span><span>Replies within a day</span></div>
+        <div class="split">
+          <div class="pitch">
+            <h2>Let's talk.</h2>
+            <p>Open to product design roles where clarity matters more than decoration. Send a note and I'll get back within a day.</p>
+            <a class="mail" href="mailto:utsavsaini747@gmail.com">utsavsaini747@gmail.com <span class="arrow">→</span></a>
+          </div>
+          <div class="channels">
+            <a class="channel" href="https://www.linkedin.com/in/utsavsaini/" target="_blank" rel="noopener"><span class="mono">LinkedIn</span><span>in/utsavsaini</span><span class="arrow">↗</span></a>
+            <a class="channel" href="https://x.com/utsav_saini" target="_blank" rel="noopener"><span class="mono">X</span><span>@utsav_saini</span><span class="arrow">↗</span></a>
+            <a class="channel" href="utsav-saini-resume.pdf" download="Utsav Saini - Resume.pdf"><span class="mono">Resume</span><span>PDF — 149 KB</span><span class="arrow">↗</span></a>
+            <div class="channel"><span class="mono">Location</span><span>Gurugram, India</span><span></span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="mobile-foot">
+        <span class="mono">Toolkit</span>
+        <p class="tools">Figma · Illustrator · Framer · Rive<br>Unicorn Studio · Claude · Paper AI</p>
+        <div class="links">
+          <a href="mailto:utsavsaini747@gmail.com">Email</a>
+          <a href="https://www.linkedin.com/in/utsavsaini/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://x.com/utsav_saini" target="_blank" rel="noopener">X</a>
+          <a href="utsav-saini-resume.pdf" target="_blank" rel="noopener">Resume</a>
+        </div>
+        <p class="fine"><span>© 2026 Utsav Saini</span><span>Designed and built in Figma &amp; Framer</span></p>
       </div>
-    </section>
 
-    <section class="contact reveal" id="contact">
-      <p class="section-label">Get in touch</p>
-      <h2>Let's talk.</h2>
-      <p class="contact-line">Open to new opportunities — reach out anytime.</p>
-      <div class="contact-links">
-        <a href="mailto:utsavsaini747@gmail.com">Email</a>
-        <a href="https://www.linkedin.com/in/utsavsaini/" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://x.com/utsav_saini" target="_blank" rel="noopener">X</a>
-        <a href="utsav-saini-resume.pdf" download="Utsav Saini - Resume.pdf">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-            stroke-linejoin="round">
-            <path d="M12 3v11m0 0-3.5-3.5M12 14l3.5-3.5" />
-            <path d="M5 17v1.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V17" />
-          </svg>
-          Download Resume
-        </a>
-      </div>
-    </section>
-
-    <footer>© 2026 Utsav Saini</footer>
-
-  </main>
-
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="modal-close" id="modalClose" type="button" aria-label="Close">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <path d="M5 5l14 14M19 5L5 19" />
-        </svg>
-      </button>
-      <div class="modal-head">
-        <p class="project-tag" id="modalTag"></p>
-        <h3 class="modal-title" id="modalTitle"></h3>
-        <p class="project-line" id="modalLine"></p>
-        <p class="project-desc" id="modalDesc"></p>
-      </div>
-      <div class="modal-gallery" id="modalGallery"></div>
-    </div>
+      <footer class="site-foot mono">
+        <span>Utsav Saini — Portfolio 2026</span>
+        <a href="#top">Back to top ↑</a>
+      </footer>
+    </main>
   </div>
 
   <script>
-    const observer = new IntersectionObserver((entries) => {
+    // Highlight the rail index entry for the section in view
+    const indexLinks = document.querySelectorAll('.index a');
+    const spy = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          observer.unobserve(entry.target);
-        }
+        if (!entry.isIntersecting) return;
+        const id = entry.target.id === 'about' ? 'about' : entry.target.id;
+        indexLinks.forEach((a) => a.classList.toggle('active', a.dataset.section === id));
       });
-    }, { threshold: 0.12 });
-
-    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-
-    // Theme toggle
-    const themeToggle = document.getElementById('themeToggle');
-    themeToggle.addEventListener('click', () => {
-      const root = document.documentElement;
-      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-    });
-
-    // Project modal
-    const PROJECTS = {
-      'process-pulse': {
-        tag: 'Finance · Data Visualization',
-        title: 'Process Pulse',
-        line: 'Turning a five-stage procure-to-pay pipeline into a single, readable flow.',
-        desc: 'A Sankey-based dashboard that traces every invoice through sourcing, indexing, matching, exceptions, and posting — surfacing straight-through rates and exception hotspots at a glance, in a process that used to take a spreadsheet and a lot of explaining.',
-        images: ['PTP Process Pulse.png']
-      },
-      'reckoner': {
-        tag: 'Supply Chain · Forecasting',
-        title: 'Reckoner',
-        line: 'A forecasting workbench that makes seven statistical models feel like one simple decision.',
-        desc: "Planners upload demand data, compare models — TBATS, ARIMA, Holt-Winters, and more — side by side on accuracy, and tune seasonality and trend without touching a formula. The hard part was making statistical forecasting legible to people who aren't statisticians.",
-        images: [
-          'Reckoner Data Summary 01.png',
-          'Reckoner Model Tbats.png',
-          'Reckoner Model Ex SES.png',
-          'Reckoner Model Ex LES.png',
-          'Reckoner Model Ex HW.png'
-        ]
-      },
-      'nest': {
-        tag: 'Operations · Transition Management',
-        title: 'Nest',
-        line: 'The workspace that guides teams through standing up a new client transition.',
-        desc: 'From deal demographics to workstream timelines, Nest structures the dozens of configuration steps a transition team has to get right — replacing scattered trackers with one guided, step-by-step setup.',
-        images: [
-          'Nest PMO Deal Demographics Key Attributes.png',
-          'Nest PMO Deal Demographics Additional Attributes.png',
-          'Nest PMO Transition Timeline Tab 1 copy paste feature single row.png',
-          'Nest PMO Transition Timeline Tab 1 copy paste feature blue outline buttons.png',
-          'Nest PMO Transition Timeline Tab 1 copy paste feature blue outline buttons hover keyboard shortcut.png'
-        ]
-      },
-      'landing-pages': {
-        tag: 'Presentations · Landing Pages',
-        title: 'Landing Pages',
-        line: 'Presentation-ready landing pages built for high-stakes client pitches.',
-        desc: "A set of landing pages designed for internal presentations ahead of high-stakes potential client pitches — turning a pitch narrative into a polished, single-page story the team could walk a client through with confidence.",
-        images: [
-          'Resilient work.PNG',
-          'Resilient Work 2.PNG',
-          'Lixil PO LP Grey rising sun 02.png',
-          'Fedex.PNG'
-        ],
-        folder: 'Landing pages'
-      }
-    };
-
-    const overlay = document.getElementById('modalOverlay');
-    const modal = document.getElementById('modal');
-    const modalTag = document.getElementById('modalTag');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalLine = document.getElementById('modalLine');
-    const modalDesc = document.getElementById('modalDesc');
-    const modalGallery = document.getElementById('modalGallery');
-    const modalClose = document.getElementById('modalClose');
-    let lastFocused = null;
-    let carouselImages = [];
-    let carouselIndex = 0;
-
-    function imagePath(file) {
-      const folder = PROJECTS[currentProjectId].folder;
-      const path = folder ? `${folder}/${file}` : file;
-      return `images/${path.split('/').map(encodeURIComponent).join('/')}`;
-    }
-
-    function updateCarouselImage() {
-      const img = document.getElementById('carouselImg');
-      const counter = document.getElementById('carouselCounter');
-      const total = carouselImages.length;
-      img.style.opacity = '0';
-      img.onload = () => { img.style.opacity = '1'; };
-      img.src = imagePath(carouselImages[carouselIndex]);
-      img.alt = `${modalTitle.textContent} screenshot ${carouselIndex + 1} of ${total}`;
-      if (counter) counter.textContent = `${carouselIndex + 1} / ${total}`;
-    }
-
-    function navigateCarousel(delta) {
-      const total = carouselImages.length;
-      carouselIndex = (carouselIndex + delta + total) % total;
-      updateCarouselImage();
-    }
-
-    function buildCarousel() {
-      const total = carouselImages.length;
-      const controls = total > 1 ? `
-        <button class="carousel-btn prev" type="button" aria-label="Previous image">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button class="carousel-btn next" type="button" aria-label="Next image">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-        <div class="carousel-counter" id="carouselCounter"></div>
-      ` : '';
-      modalGallery.innerHTML = `
-        <div class="carousel">
-          <div class="carousel-frame"><img id="carouselImg" alt=""></div>
-          ${controls}
-        </div>
-      `;
-      if (total > 1) {
-        modalGallery.querySelector('.prev').addEventListener('click', () => navigateCarousel(-1));
-        modalGallery.querySelector('.next').addEventListener('click', () => navigateCarousel(1));
-      }
-      updateCarouselImage();
-    }
-
-    let currentProjectId = null;
-
-    function openProject(id) {
-      const data = PROJECTS[id];
-      if (!data) return;
-      currentProjectId = id;
-      modalTag.textContent = data.tag;
-      modalTitle.textContent = data.title;
-      modalLine.textContent = data.line;
-      modalDesc.textContent = data.desc;
-
-      carouselImages = data.images;
-      carouselIndex = 0;
-      buildCarousel();
-
-      lastFocused = document.activeElement;
-      overlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      modalClose.focus();
-    }
-
-    function closeProject() {
-      overlay.classList.remove('open');
-      document.body.style.overflow = '';
-      if (lastFocused) lastFocused.focus();
-    }
-
-    document.querySelectorAll('.project[data-project]').forEach((card) => {
-      card.addEventListener('click', () => openProject(card.dataset.project));
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openProject(card.dataset.project);
-        }
-      });
-    });
-
-    modalClose.addEventListener('click', closeProject);
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) closeProject();
-    });
-    document.addEventListener('keydown', (e) => {
-      if (!overlay.classList.contains('open')) return;
-      if (e.key === 'Escape') closeProject();
-      if (e.key === 'ArrowLeft' && carouselImages.length > 1) navigateCarousel(-1);
-      if (e.key === 'ArrowRight' && carouselImages.length > 1) navigateCarousel(1);
-    });
+    }, { rootMargin: '-35% 0px -55% 0px' });
+    document.querySelectorAll('#about, #work, #experience, #contact').forEach((s) => spy.observe(s));
   </script>
 
 </body>
