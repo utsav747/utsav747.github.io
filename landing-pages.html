@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
+<body class="cs">
   <div class="shell" id="top">
 
     <aside class="rail">
@@ -101,6 +101,30 @@
       </footer>
     </main>
   </div>
+  <script>
+    // Scroll reveal: stagger siblings, remove the hidden state once settled
+    document.documentElement.classList.add('js');
+    const revealSel = '.section-head, .shot, .featured, .index-head, .project, .job, .split, .cs-block, .screens figure';
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        io.unobserve(el);
+        el.classList.add('in');
+        el.addEventListener('transitionend', (e) => {
+          if (e.propertyName !== 'opacity') return;
+          el.classList.remove('reveal', 'in');
+          el.style.removeProperty('--d');
+        });
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    document.querySelectorAll(revealSel).forEach((el) => {
+      const sibs = [...el.parentElement.children].filter((c) => c.matches(revealSel));
+      el.style.setProperty('--d', `${Math.min(sibs.indexOf(el), 4) * 60}ms`);
+      el.classList.add('reveal');
+      io.observe(el);
+    });
+  </script>
 </body>
 
 </html>
